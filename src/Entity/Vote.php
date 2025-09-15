@@ -16,6 +16,12 @@ class Vote
     #[ORM\Column(nullable: true)]
     private ?int $point = null;
 
+    #[ORM\ManyToOne(inversedBy: 'votes')]
+    private ?Equipe $vote = null;
+
+    #[ORM\ManyToOne(inversedBy: 'rencontreVote')]
+    private ?Rencontre $rencontre = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +35,30 @@ class Vote
     public function setPoint(?int $point): static
     {
         $this->point = $point;
+
+        return $this;
+    }
+
+    public function getVote(): ?Equipe
+    {
+        return $this->vote;
+    }
+
+    public function setVote(?Equipe $vote): static
+    {
+        $this->vote = $vote;
+
+        return $this;
+    }
+
+    public function getRencontre(): ?Rencontre
+    {
+        return $this->rencontre;
+    }
+
+    public function setRencontre(?Rencontre $rencontre): static
+    {
+        $this->rencontre = $rencontre;
 
         return $this;
     }

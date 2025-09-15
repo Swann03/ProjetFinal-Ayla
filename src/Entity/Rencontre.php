@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RencontreRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RencontreRepository::class)]
@@ -21,6 +23,31 @@ class Rencontre
 
     #[ORM\Column(length: 255)]
     private ?string $jeu = null;
+
+    /**
+     * @var Collection<int, Equipe>
+     */
+    #[ORM\ManyToMany(targetEntity: Equipe::class, inversedBy: 'rencontres')]
+    private Collection $rencontre;
+
+    /**
+     * @var Collection<int, Vote>
+     */
+    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'rencontre')]
+    private Collection $rencontreVote;
+
+    /**
+     * @var Collection<int, Statistique>
+     */
+    #[ORM\OneToMany(targetEntity: Statistique::class, mappedBy: 'statistique')]
+    private Collection $statistiques;
+
+    public function __construct()
+    {
+        $this->rencontre = new ArrayCollection();
+        $this->rencontreVote = new ArrayCollection();
+        $this->statistiques = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -59,6 +86,90 @@ class Rencontre
     public function setJeu(string $jeu): static
     {
         $this->jeu = $jeu;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Equipe>
+     */
+    public function getRencontre(): Collection
+    {
+        return $this->rencontre;
+    }
+
+    public function addRencontre(Equipe $rencontre): static
+    {
+        if (!$this->rencontre->contains($rencontre)) {
+            $this->rencontre->add($rencontre);
+        }
+
+        return $this;
+    }
+
+    public function removeRencontre(Equipe $rencontre): static
+    {
+        $this->rencontre->removeElement($rencontre);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vote>
+     */
+    public function getRencontreVote(): Collection
+    {
+        return $this->rencontreVote;
+    }
+
+    public function addRencontreVote(Vote $rencontreVote): static
+    {
+        if (!$this->rencontreVote->contains($rencontreVote)) {
+            $this->rencontreVote->add($rencontreVote);
+            $rencontreVote->setRencontre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRencontreVote(Vote $rencontreVote): static
+    {
+        if ($this->rencontreVote->removeElement($rencontreVote)) {
+            // set the owning side to null (unless already changed)
+            if ($rencontreVote->getRencontre() === $this) {
+                $rencontreVote->setRencontre(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Statistique>
+     */
+    public function getStatistiques(): Collection
+    {
+        return $this->statistiques;
+    }
+
+    public function addStatistique(Statistique $statistique): static
+    {
+        if (!$this->statistiques->contains($statistique)) {
+            $this->statistiques->add($statistique);
+            $statistique->setStatistique($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStatistique(Statistique $statistique): static
+    {
+        if ($this->statistiques->removeElement($statistique)) {
+            // set the owning side to null (unless already changed)
+            if ($statistique->getStatistique() === $this) {
+                $statistique->setStatistique(null);
+            }
+        }
 
         return $this;
     }
