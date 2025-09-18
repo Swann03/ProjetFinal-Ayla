@@ -20,11 +20,11 @@ class Joueur
     private ?string $bio = null;
 
     
-    #[ORM\OneToOne(mappedBy: 'Joueur', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'joueur', cascade: ['persist', 'remove'])]
     private ?Statistique $statistique = null;
 
     #[ORM\ManyToOne(inversedBy: 'joueurs')]
-    private ?Equipe $joueur = null;
+    private ?Equipe $equipe = null;
 
     public function getId(): ?int
     {
@@ -78,14 +78,14 @@ class Joueur
         return $this;
     }
 
-    public function getJoueur(): ?Equipe
+    public function getEquipe(): ?Equipe
     {
-        return $this->joueur;
+        return $this->equipe;
     }
 
-    public function setJoueur(?Equipe $joueur): static
+    public function setEquipe(?Equipe $equipe): static
     {
-        $this->joueur = $joueur;
+        $this->equipe = $equipe;
 
         return $this;
     }

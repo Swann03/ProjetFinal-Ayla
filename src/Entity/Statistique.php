@@ -22,8 +22,8 @@ class Statistique
     #[ORM\Column]
     private ?int $assistCount = null;
 
-    #[ORM\OneToOne(inversedBy: 'statistique', cascade: ['persist', 'remove'])]
-    private ?Joueur $Joueur = null;
+    #[ORM\OneToOne(mappedBy: 'statistique', cascade: ['persist', 'remove'])]
+    private ?Joueur $joueur = null;
 
     #[ORM\ManyToOne(inversedBy: 'statistiques')]
     private ?Rencontre $statistique = null;
@@ -71,13 +71,22 @@ class Statistique
 
     public function getJoueur(): ?Joueur
     {
-        return $this->Joueur;
+        return $this->joueur;
     }
 
-    public function setJoueur(?Joueur $Joueur): static
+    public function setJoueur(?Joueur $joueur): static
     {
-        $this->Joueur = $Joueur;
+        // unset the owning side of the relation if necessary
+        if ($joueur === null && $this->joueur !== null) {
+            $this->joueur->setStatistique(null);
+        }
 
+        // set the owning side of the relation if necessary
+        if ($joueur !== null && $joueur->getStatistique() !== $this) {
+            $joueur->setStatistique($this);
+        }
+
+        $this->joueur = $joueur;
         return $this;
     }
 

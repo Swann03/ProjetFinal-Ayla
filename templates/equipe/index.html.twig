@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle équipe{% endblock %}
+
+{% block body %}
+ {{ form_start (formEquipe) }}
+{{ form_widget (formEquipe) }}
+
+<input type="submit" value="Insert">
+
+{{ form_end (formEquipe) }}
+{% endblock %}

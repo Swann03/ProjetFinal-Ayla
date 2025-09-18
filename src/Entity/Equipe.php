@@ -27,25 +27,25 @@ class Equipe
     /**
      * @var Collection<int, Joueur>
      */
-    #[ORM\OneToMany(targetEntity: Joueur::class, mappedBy: 'joueur')]
+    #[ORM\OneToMany(targetEntity: Joueur::class, mappedBy: 'equipe')]
     private Collection $joueurs;
 
     /**
-     * @var Collection<int, media>
+     * @var Collection<int, Media>
      */
-    #[ORM\OneToMany(targetEntity: media::class, mappedBy: 'equipe')]
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'equipe')]
     private Collection $media;
 
     /**
      * @var Collection<int, Rencontre>
      */
-    #[ORM\ManyToMany(targetEntity: Rencontre::class, mappedBy: 'rencontre')]
+    #[ORM\ManyToMany(targetEntity: Rencontre::class, mappedBy: 'equipe')]
     private Collection $rencontres;
 
     /**
      * @var Collection<int, Vote>
      */
-    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'vote')]
+    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'equipe')]
     private Collection $votes;
 
     public function __construct()
@@ -109,7 +109,7 @@ class Equipe
     {
         if (!$this->joueurs->contains($joueur)) {
             $this->joueurs->add($joueur);
-            $joueur->setJoueur($this);
+            $joueur->setEquipe($this);
         }
 
         return $this;
@@ -119,8 +119,8 @@ class Equipe
     {
         if ($this->joueurs->removeElement($joueur)) {
             // set the owning side to null (unless already changed)
-            if ($joueur->getJoueur() === $this) {
-                $joueur->setJoueur(null);
+            if ($joueur->getEquipe() === $this) {
+                $joueur->setEquipe(null);
             }
         }
 
