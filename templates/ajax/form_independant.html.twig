@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AjaxController!{% endblock %}
+
+{% block body %}
+{#Dans cette vue on doit avoir le formulaire et le traitelement Ajax#}
+
+<form>
+<input type="text" name="nom">
+<input type="submit">
+    
+</form>
+
+<script>
+const txtNom = document.querySelector('#txt_nom');
+txtNom.addEventListener("input", function(event){
+    const valeur = event.target.value; //obtenir la valeur de l'input
+    console.log(valeur);
+});
+
+
+</script>
+{% endblock %}

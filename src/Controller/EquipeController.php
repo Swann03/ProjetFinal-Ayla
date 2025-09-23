@@ -13,40 +13,32 @@ use App\Entity\Equipe;
 final class EquipeController extends AbstractController
 {
     #[Route('/equipe', name: 'app_equipe')]
-    public function AfficherForm(): Response
-    {
-        // créer un objet formulaire
+public function AfficherForm(): Response
+{
     $formEquipe = $this->createForm(EquipeType::class);
-    $vars = ['formEquipe' => $formEquipe];
+    return $this->render('equipe/index.html.twig', [
+        'formEquipe' => $formEquipe->createView()
+    ]);
+}
 
-    // faire le rendu de la vue. Envoyer l'objet form
-        // depuis le controller
-        return $this->render('equipe/index.html.twig', $vars);
-
-    }
-
-    #[Route('/equipe/insert', name: 'app_equipe_insert')]
-    public function InsertForm(Request $req, EntityManagerInterface $em): Response
-    {
-        $equipe = new Equipe();
-        // créer un objet formulaire
-    $formEquipe = $this->createForm(EquipeType::class);
+#[Route('/equipe/insert', name: 'app_equipe_insert')]
+public function InsertForm(Request $req, EntityManagerInterface $em): Response
+{
+    $equipe = new Equipe();
+    $formEquipe = $this->createForm(EquipeType::class, $equipe);
     $formEquipe->handleRequest($req);
-    // faire le rendu de la vue. Envoyer l'objet form
-        // depuis le controller
       
-        if ($formEquipe->isSubmitted()) {
-            $em->persist($equipe);
-            $em->flush();
-            return $this->redirectToRoute('app_equipe');
-        }
-        else {
-            $vars['formEquipe'] = $formEquipe;
-             return $this->render('equipe/affiche_form_insert_equipe.html.twig', $vars);
-        }
-       
-
+    if ($formEquipe->isSubmitted() && $formEquipe->isValid()) {
+        $em->persist($equipe);
+        $em->flush();
+        return $this->redirectToRoute('app_equipe');
     }
+
+    return $this->render('equipe/affiche_form_insert_equipe.html.twig', [
+        'formEquipe' => $formEquipe->createView()
+    ]);
+}
+    
 
 
 }
