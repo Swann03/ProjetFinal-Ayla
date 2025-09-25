@@ -20,7 +20,8 @@ class Joueur
     private ?string $bio = null;
 
     
-    #[ORM\OneToOne(mappedBy: 'joueur', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'joueur', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Statistique $statistique = null;
 
     #[ORM\ManyToOne(inversedBy: 'joueurs')]

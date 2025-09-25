@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gentlemates Esports{% endblock %}
+
+{% block body %}
+  <!-- HERO -->
+  <section class="hero" style="background-image: url('{{ asset('images/' ~ hero.imageFond) }}');">
+    <div class="hero-overlay">
+      <h1>{{ hero.titre }}</h1>
+      <p>{{ hero.sousTitre }}</p>
+      <a href="{{ hero.ctaLien }}" class="btn-hero">{{ hero.ctaLabel }}</a>
+    </div>
+  </section>
+
+  <!-- PROCHAINS MATCHS -->
+  <section class="matchs">
+    <div class="container">
+      <h2>📅 Prochains Matchs</h2>
+      <div class="match-list">
+        {% for match in prochainsMatchs %}
+          <div class="match-item">
+            <span class="match-date">{{ match.date|date('d M Y H:i') }}</span>
+            <span class="match-vs">{{ match.equipe1.nom }} VS {{ match.equipe2.nom }}</span>
+            <span class="match-tournoi">{{ match.tournoi }}</span>
+          </div>
+        {% else %}
+          <p>Aucun match à venir pour le moment.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTRE EQUIPE -->
+  <section class="equipe">
+    <div class="container">
+      <h2>👥 Notre Équipe</h2>
+      {% if equipe %}
+        <div class="equipe-info">
+          <img src="{{ asset('uploads/equipes/' ~ equipe.logo) }}" alt="{{ equipe.nom }}" class="equipe-logo">
+          <h3>{{ equipe.nom }}</h3>
+          <p>{{ equipe.description }}</p>
+        </div>
+      {% else %}
+        <p>Équipe non trouvée.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- VOTE -->
+  <section class="vote">
+    <div class="container">
+      <h2>🗳️ Participez aux Votes</h2>
+      {% if votes|length > 0 %}
+        {% set vote = votes[0] %}
+        <p>{{ vote.question }}</p>
+        <a href="{{ path('vote_show', {id: vote.id}) }}" class="btn-primary">Voter</a>
+      {% else %}
+        <p>Aucun vote actif pour le moment.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- MEDIAS -->
+  <section class="medias">
+    <div class="container">
+      <h2>🎥 Derniers Médias</h2>
+      <div class="media-list">
+        {% for media in medias %}
+          <div class="media-item">
+            {% if media.type == 'video' %}
+              <video controls>
+                <source src="{{ asset('uploads/medias/' ~ media.fichier) }}" type="video/mp4">
+              </video>
+            {% else %}
+              <img src="{{ asset('uploads/medias/' ~ media.fichier) }}" alt="{{ media.titre }}">
+            {% endif %}
+            <h3>{{ media.titre }}</h3>
+          </div>
+        {% else %}
+          <p>Aucun média disponible.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endblock %}
