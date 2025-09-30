@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Joueur;
 use App\Entity\Rencontre;
 use App\Entity\Statistique;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -18,10 +17,6 @@ class StatistiqueType extends AbstractType
             ->add('killCount')
             ->add('deadCount')
             ->add('assistCount')
-            ->add('joueur', EntityType::class, [
-                'class' => Joueur::class,
-                'choice_label' => 'id',
-            ])
             ->add('statistique', EntityType::class, [
                 'class' => Rencontre::class,
                 'choice_label' => 'id',

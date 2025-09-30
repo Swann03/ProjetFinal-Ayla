@@ -5,17 +5,32 @@
 {% block body %}
 {#Dans cette vue on doit avoir le formulaire et le traitelement Ajax#}
 
-<form>
-<input type="text" name="nom">
+<form id ="form_nom">
+<input type="text" name="nom" id="txt_nom"An exception occurred in the driver: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it>
 <input type="submit">
     
 </form>
-
+<div id="div_contenu">Ici on aura la réponse</div>
 <script>
 const txtNom = document.querySelector('#txt_nom');
 txtNom.addEventListener("input", function(event){
     const valeur = event.target.value; //obtenir la valeur de l'input
-    console.log(valeur);
+    const formNom = document.querySelector('#form_nom');
+    // on crée un FormData à partir d'un élement Form du DOM
+    const formData = new FormData(formNom);
+    // on a la valeur : on appele le serveur
+    axios ({
+        url: '/ajax/form/independant/traitement'
+        method: 'POST',
+        data: formData,
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }).then(function (response) {
+        const divContenu = document.querySelector('#div_contenu');
+        divContenu.innerHTML = response.data.message;
+    });
+    // console.log(valeur);
 });
 
 

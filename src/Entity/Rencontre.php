@@ -15,7 +15,7 @@ class Rencontre
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTime $date = null;
 
     #[ORM\Column(length: 255)]
@@ -33,13 +33,13 @@ class Rencontre
     /**
      * @var Collection<int, Vote>
      */
-    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'rencontre')]
+    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'rencontre', cascade: ['persist', 'remove'])]
     private Collection $rencontreVote;
 
     /**
      * @var Collection<int, Statistique>
      */
-    #[ORM\OneToMany(targetEntity: Statistique::class, mappedBy: 'statistique')]
+    #[ORM\OneToMany(targetEntity: Statistique::class, mappedBy: 'rencontre', cascade: ['persist', 'remove'])]
     private Collection $statistiques;
 
     public function __construct()
@@ -62,7 +62,6 @@ class Rencontre
     public function setDate(\DateTime $date): static
     {
         $this->date = $date;
-
         return $this;
     }
 
@@ -74,7 +73,6 @@ class Rencontre
     public function setResultat(string $resultat): static
     {
         $this->resultat = $resultat;
-
         return $this;
     }
 
@@ -86,7 +84,6 @@ class Rencontre
     public function setJeu(string $jeu): static
     {
         $this->jeu = $jeu;
-
         return $this;
     }
 
@@ -103,14 +100,12 @@ class Rencontre
         if (!$this->rencontre->contains($rencontre)) {
             $this->rencontre->add($rencontre);
         }
-
         return $this;
     }
 
     public function removeRencontre(Equipe $rencontre): static
     {
         $this->rencontre->removeElement($rencontre);
-
         return $this;
     }
 
@@ -128,19 +123,16 @@ class Rencontre
             $this->rencontreVote->add($rencontreVote);
             $rencontreVote->setRencontre($this);
         }
-
         return $this;
     }
 
     public function removeRencontreVote(Vote $rencontreVote): static
     {
         if ($this->rencontreVote->removeElement($rencontreVote)) {
-            // set the owning side to null (unless already changed)
             if ($rencontreVote->getRencontre() === $this) {
                 $rencontreVote->setRencontre(null);
             }
         }
-
         return $this;
     }
 
@@ -156,21 +148,18 @@ class Rencontre
     {
         if (!$this->statistiques->contains($statistique)) {
             $this->statistiques->add($statistique);
-            $statistique->setStatistique($this);
+            $statistique->setRencontre($this);
         }
-
         return $this;
     }
 
     public function removeStatistique(Statistique $statistique): static
     {
         if ($this->statistiques->removeElement($statistique)) {
-            // set the owning side to null (unless already changed)
-            if ($statistique->getStatistique() === $this) {
-                $statistique->setStatistique(null);
+            if ($statistique->getRencontre() === $this) {
+                $statistique->setRencontre(null);
             }
         }
-
         return $this;
     }
 }

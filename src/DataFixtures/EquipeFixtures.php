@@ -10,12 +10,15 @@ class EquipeFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $gentlemates = new Equipe();
-        $gentlemates->setNom('Gentlemates');
-        $gentlemates->setDescription('Equipe forte');
-        $gentlemates->setLogo('logo.png');
-        $manager->persist($gentlemates);
 
+        for ($i = 1; $i <= 4; $i++) {
+            $gentlemates = new Equipe();
+            $gentlemates->setNom('Gentlemates'.$i);
+            $gentlemates->setDescription('Equipe forte'.$i);
+            $gentlemates->setLogo('logo'.$i . '.png');
+            $this->addReference('equipe'.$i, $gentlemates); 
+            $manager->persist($gentlemates);
+        }
         $manager->flush();
     }
 }

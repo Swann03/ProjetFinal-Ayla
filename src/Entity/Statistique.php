@@ -22,11 +22,9 @@ class Statistique
     #[ORM\Column]
     private ?int $assistCount = null;
 
-    #[ORM\OneToOne(mappedBy: 'statistique', cascade: ['persist', 'remove'])]
-    private ?Joueur $joueur = null;
-
     #[ORM\ManyToOne(inversedBy: 'statistiques')]
-    private ?Rencontre $statistique = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Rencontre $rencontre = null;   // ✅ renommé correctement
 
     public function getId(): ?int
     {
@@ -41,7 +39,6 @@ class Statistique
     public function setKillCount(int $killCount): static
     {
         $this->killCount = $killCount;
-
         return $this;
     }
 
@@ -53,7 +50,6 @@ class Statistique
     public function setDeadCount(int $deadCount): static
     {
         $this->deadCount = $deadCount;
-
         return $this;
     }
 
@@ -65,40 +61,18 @@ class Statistique
     public function setAssistCount(int $assistCount): static
     {
         $this->assistCount = $assistCount;
-
         return $this;
     }
 
-    public function getJoueur(): ?Joueur
+    public function getRencontre(): ?Rencontre
     {
-        return $this->joueur;
+        return $this->rencontre;
     }
 
-    public function setJoueur(?Joueur $joueur): static
+    public function setRencontre(?Rencontre $rencontre): static
     {
-        // unset the owning side of the relation if necessary
-        if ($joueur === null && $this->joueur !== null) {
-            $this->joueur->setStatistique(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($joueur !== null && $joueur->getStatistique() !== $this) {
-            $joueur->setStatistique($this);
-        }
-
-        $this->joueur = $joueur;
-        return $this;
-    }
-
-    public function getStatistique(): ?Rencontre
-    {
-        return $this->statistique;
-    }
-
-    public function setStatistique(?Rencontre $statistique): static
-    {
-        $this->statistique = $statistique;
-
+        $this->rencontre = $rencontre;
         return $this;
     }
 }
+

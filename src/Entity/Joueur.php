@@ -19,11 +19,6 @@ class Joueur
     #[ORM\Column(length: 255)]
     private ?string $bio = null;
 
-    
-    #[ORM\OneToOne(inversedBy: 'joueur', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Statistique $statistique = null;
-
     #[ORM\ManyToOne(inversedBy: 'joueurs')]
     private ?Equipe $equipe = null;
 
@@ -52,29 +47,6 @@ class Joueur
     public function setBio(string $bio): static
     {
         $this->bio = $bio;
-
-        return $this;
-    }
-
-    
-    public function getStatistique(): ?Statistique
-    {
-        return $this->statistique;
-    }
-
-    public function setStatistique(?Statistique $statistique): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($statistique === null && $this->statistique !== null) {
-            $this->statistique->setJoueur(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($statistique !== null && $statistique->getJoueur() !== $this) {
-            $statistique->setJoueur($this);
-        }
-
-        $this->statistique = $statistique;
 
         return $this;
     }

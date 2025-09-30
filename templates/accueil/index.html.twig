@@ -1,85 +1,117 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gentlemates Esports{% endblock %}
+{% block title %}Accueil - Esports Platform{% endblock %}
+
+{% block stylesheets %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #0a0e27;
+        color: #fff;
+    }
+
+    /* M8Image/Bannière */
+    .M8Image {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        background-image: url('{{ asset('images/M8-banner.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    /* Overlay sombre pour mieux lire le texte */
+    .M8Image::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+    }
+
+    .M8Image-content {
+        text-align: center;
+        z-index: 2;
+        padding: 0 20px;
+        position: relative;
+    }
+
+    .M8Image h1 {
+        font-size: 5rem;
+        margin-bottom: 20px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+        animation: fadeInUp 1s ease;
+    }
+
+    .M8Image p {
+        font-size: 1.8rem;
+        margin-bottom: 40px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        animation: fadeInUp 1s ease 0.2s both;
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: 18px 50px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+        animation: fadeInUp 1s ease 0.4s both;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.6);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .M8Image h1 {
+            font-size: 2.5rem;
+        }
+        
+        .M8Image p {
+            font-size: 1.2rem;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-  <!-- HERO -->
-  <section class="hero" style="background-image: url('{{ asset('images/' ~ hero.imageFond) }}');">
-    <div class="hero-overlay">
-      <h1>{{ hero.titre }}</h1>
-      <p>{{ hero.sousTitre }}</p>
-      <a href="{{ hero.ctaLien }}" class="btn-hero">{{ hero.ctaLabel }}</a>
-    </div>
-  </section>
-
-  <!-- PROCHAINS MATCHS -->
-  <section class="matchs">
-    <div class="container">
-      <h2>📅 Prochains Matchs</h2>
-      <div class="match-list">
-        {% for match in prochainsMatchs %}
-          <div class="match-item">
-            <span class="match-date">{{ match.date|date('d M Y H:i') }}</span>
-            <span class="match-vs">{{ match.equipe1.nom }} VS {{ match.equipe2.nom }}</span>
-            <span class="match-tournoi">{{ match.tournoi }}</span>
-          </div>
-        {% else %}
-          <p>Aucun match à venir pour le moment.</p>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-
-  <!-- NOTRE EQUIPE -->
-  <section class="equipe">
-    <div class="container">
-      <h2>👥 Notre Équipe</h2>
-      {% if equipe %}
-        <div class="equipe-info">
-          <img src="{{ asset('uploads/equipes/' ~ equipe.logo) }}" alt="{{ equipe.nom }}" class="equipe-logo">
-          <h3>{{ equipe.nom }}</h3>
-          <p>{{ equipe.description }}</p>
+    <!-- M8Image/Bannière -->
+    <section class="M8Image">
+        <div class="M8Image-content">
+            <h1>BIENVENUE DANS L'ARÈNE</h1>
+            <p>Rejoignez l'élite des compétitions esports</p>
+            <a href="#matches" class="cta-button">DÉCOUVRIR LES MATCHES</a>
         </div>
-      {% else %}
-        <p>Équipe non trouvée.</p>
-      {% endif %}
-    </div>
-  </section>
-
-  <!-- VOTE -->
-  <section class="vote">
-    <div class="container">
-      <h2>🗳️ Participez aux Votes</h2>
-      {% if votes|length > 0 %}
-        {% set vote = votes[0] %}
-        <p>{{ vote.question }}</p>
-        <a href="{{ path('vote_show', {id: vote.id}) }}" class="btn-primary">Voter</a>
-      {% else %}
-        <p>Aucun vote actif pour le moment.</p>
-      {% endif %}
-    </div>
-  </section>
-
-  <!-- MEDIAS -->
-  <section class="medias">
-    <div class="container">
-      <h2>🎥 Derniers Médias</h2>
-      <div class="media-list">
-        {% for media in medias %}
-          <div class="media-item">
-            {% if media.type == 'video' %}
-              <video controls>
-                <source src="{{ asset('uploads/medias/' ~ media.fichier) }}" type="video/mp4">
-              </video>
-            {% else %}
-              <img src="{{ asset('uploads/medias/' ~ media.fichier) }}" alt="{{ media.titre }}">
-            {% endif %}
-            <h3>{{ media.titre }}</h3>
-          </div>
-        {% else %}
-          <p>Aucun média disponible.</p>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
+    </section>
 {% endblock %}

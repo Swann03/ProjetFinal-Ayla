@@ -16,8 +16,8 @@ class Vote
     #[ORM\Column(nullable: true)]
     private ?int $point = null;
 
-    #[ORM\ManyToOne(inversedBy: 'votes')]
-    private ?Equipe $vote = null;
+    #[ORM\ManyToOne(inversedBy: 'EquipeVote')]
+    private ?Equipe $equipe = null;
 
     #[ORM\ManyToOne(inversedBy: 'rencontreVote')]
     private ?Rencontre $rencontre = null;
@@ -39,14 +39,14 @@ class Vote
         return $this;
     }
 
-    public function getVote(): ?Equipe
+    public function getEquipe(): ?Equipe
     {
-        return $this->vote;
+        return $this->equipe;
     }
 
-    public function setVote(?Equipe $vote): static
+    public function setEquipe(?Equipe $equipe): static
     {
-        $this->vote = $vote;
+        $this->equipe = $equipe;
 
         return $this;
     }
