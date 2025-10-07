@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AccueilController extends AbstractController
 {
-    #[Route('/', name: 'app_accueil')]
+    #[Route('/accueil', name: 'app_accueil')]
     public function index(
         RencontreRepository $rencontreRepo,
         EquipeRepository $equipeRepo,
@@ -25,10 +25,10 @@ class AccueilController extends AbstractController
         $prochainsMatchs = $rencontreRepo->findBy([], ['date' => 'ASC'], 3);
         $equipe = $equipeRepo->findOneBy(['nom' => 'Gentlemates']); // Si tu as un champ nom
         $votes = $voteRepo->findBy([], ['id' => 'DESC'], 1); // Dernier vote actif
-        $medias = $mediaRepo->findBy([], ['createdAt' => 'DESC'], 4);
+        $medias = $mediaRepo->findBy([], [], 4);
 
         // Données pour le Hero
-        $hero = [
+        $banniere = [
             'titre' => 'GENTLEMATES OFFICIAL ESPORTS TEAM',
             'sousTitre' => 'ALWAYS GENTLE, ALWAYS STRONG',
             'ctaLabel' => 'JOIN THE COMMUNITY',
@@ -37,7 +37,7 @@ class AccueilController extends AbstractController
         ];
 
         return $this->render('accueil/index.html.twig', [
-            'hero' => $hero,
+            'banniere' => $banniere,
             'prochainsMatchs' => $prochainsMatchs,
             'equipe' => $equipe,
             'votes' => $votes,
