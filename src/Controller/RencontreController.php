@@ -10,10 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\RencontreRepository;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class RencontreController extends AbstractController
 {
     #[Route('/rencontre', name: 'app_rencontre', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(RencontreRepository $rencontreRepository): Response
     {
         $rencontres = $rencontreRepository->findBy([], [
@@ -29,8 +31,9 @@ final class RencontreController extends AbstractController
             'form' => $form->createView(), // Ajout de la variable form
         ]);
     }
-    
+
     #[Route('/rencontre/ajouter', name: 'app_rencontre_ajouter', methods: ['POST'])]
+    
     public function ajouter(Request $request, EntityManagerInterface $em): Response
     {
         $rencontre = new Rencontre();
@@ -78,4 +81,4 @@ final class RencontreController extends AbstractController
             'rencontre' => $rencontre,
         ]);
     }
-}
+ }

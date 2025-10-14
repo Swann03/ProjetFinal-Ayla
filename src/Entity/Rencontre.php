@@ -6,6 +6,7 @@ use App\Repository\RencontreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: RencontreRepository::class)]
 class Rencontre
@@ -15,7 +16,7 @@ class Rencontre
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime', nullable: false)] 
     private ?\DateTime $date = null;
 
     #[ORM\Column(length: 255)]
@@ -24,10 +25,12 @@ class Rencontre
     #[ORM\Column(length: 255)]
     private ?string $jeu = null;
 
+   
+
     /**
      * @var Collection<int, Equipe>
      */
-    #[ORM\ManyToMany(targetEntity: Equipe::class, inversedBy: 'rencontres')]
+    #[ORM\ManyToMany(targetEntity: Equipe::class, inversedBy: 'equipe')]
     private Collection $rencontre;
 
     /**
@@ -41,6 +44,9 @@ class Rencontre
      */
     #[ORM\OneToMany(targetEntity: Statistique::class, mappedBy: 'rencontre', cascade: ['persist', 'remove'])]
     private Collection $statistiques;
+
+   
+
 
     public function __construct()
     {
