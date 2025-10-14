@@ -20,13 +20,16 @@ class UtilisateurFixtures extends Fixture
     public function load(ObjectManager $manager):void
     {
         for ($i = 0; $i < 5 ; $i++){
-            $user = new Utilisateur();
-            $user->setEmail ("utilisateur".$i."@lala.com");
-            $user->setPassword($this->passwordHasher->hashPassword(
-                 $user,
+            $utilisateur = new Utilisateur();
+            $utilisateur->setEmail ("utilisateur".$i."@gmail.com");
+            $utilisateur->setPseudo('Pseudo'.$i);
+            $utilisateur->setDateNaissance(new \DateTimeBetween('-100 years', '-18 years'));
+
+            $utilisateur->setPassword($this->passwordHasher->hashPassword(
+                 $utilisateur,
                  'lePassword'.$i
              ));
-            $manager->persist ($user);
+            $manager->persist ($utilisateur);
         }
         $manager->flush();
     }
