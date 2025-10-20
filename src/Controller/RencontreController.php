@@ -16,21 +16,27 @@ final class RencontreController extends AbstractController
 {
     #[Route('/rencontre', name: 'app_rencontre', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function index(RencontreRepository $rencontreRepository): Response
+    public function publique(RencontreRepository $rencontreRepository): Response
     {
         $rencontres = $rencontreRepository->findBy([], [
             'date' => 'DESC'
         ]);
 
-        // Création du formulaire pour l'afficher dans la page index
-        $rencontre = new Rencontre();
-        $form = $this->createForm(RencontreType::class, $rencontre);
+        
+        $rencontresParJeu = [];
+        foreach ($rencontres as $rencontre){
+            $jeu = $rencontre->getJeu();
+            if(!isset($rencontresParJeu[$jeu])){
+                $rencontresParJeu[$jeu] = [];
+            }
+            $rencontresParJeu[$jeu][] = $rencontre;
+        }
 
-        return $this->render('rencontre/index.html.twig', [
-            'rencontres' => $rencontres,
-            'form' => $form->createView(), // Ajout de la variable form
+        return $this->render('rencontre/publique.html.twig', [
+            'rencontresParJeu' => $rencontresParJeu,
         ]);
     }
+
 
     #[Route('/rencontre/ajouter', name: 'app_rencontre_ajouter', methods: ['POST'])]
     

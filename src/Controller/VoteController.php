@@ -50,7 +50,7 @@ final class VoteController extends AbstractController
                 return $this->redirectToRoute('app_rencontre');
             }
 
-            if ($rencontre->getDateMatch() && $rencontre->getDateMatch() <= new \DateTimeImmutable()) {
+            if ($rencontre->getDateRencontre() <= new \DateTimeImmutable()) {
                 $this->addFlash('error', 'La rencontre est déjà passée !');
                 return $this->redirectToRoute('app_rencontre');
             }

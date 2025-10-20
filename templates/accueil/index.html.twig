@@ -11,6 +11,13 @@
         </div>
     </section>
 
+    <!-- BANDEROLE DE TRANSITION -->
+    <div class="transition-banner">
+        <div class="banner-content">
+            <span class="banner-text">WE ARE MATES ▸ WE ARE UNSTOPPABLE ▸ #M8WIN ▸ WE ARE MATES ▸ WE ARE UNSTOPPABLE ▸ #M8WIN ▸ WE ARE MATES ▸ WE ARE UNSTOPPABLE ▸ #M8WIN ▸ WE ARE MATES ▸ WE ARE UNSTOPPABLE ▸ #M8WIN ▸ WE ARE MATES ▸ WE ARE UNSTOPPABLE ▸ #M8WIN ▸ WE ARE MATES ▸ WE ARE UNSTOPPABLE ▸ #M8WIN ▸ </span>
+        </div>
+    </div>
+
     <!-- SECTION ABOUT -->
     <section class="about">
         <div class="container">
@@ -23,7 +30,7 @@
                 
                 <div class="about-text">
                     <p>
-                        Squeezie, Gotaga and Brawks, leading influencers in their respective fields, 
+                        Squeezie, Gotaga & Brawks, leading influencers in their respective fields, 
                         have decided to join forces around a common project: an esport club! 
                         Present since the beginnings of esport, and with the strength of their experience, 
                         they are now determined to transmit it in the best possible way and according to the values they cherish. 
@@ -33,16 +40,56 @@
             </div>
         </div>
     </section>
+
+    <!-- SECTION LATEST NEWS -->
+    <section class="news">
+        <div class="container">
+            <h2>Latest News</h2>
+            
+            <div class="news-grid">
+                <!-- Card 1 : Vidéo YouTube -->
+                <div class="news-card">
+                    <div class="news-thumbnail">
+                        <iframe 
+                            width="100%" 
+                            height="350" 
+                            src="https://www.youtube.com/embed/7oZqZyl7QgY" 
+                            title="YouTube video" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="news-content">
+                        <h3>On a gardé ça secret pendant 2 ans... (ft Squeezie, Gotaga, Brawks)</h3>
+                        <a href="https://www.youtube.com/watch?v=7oZqZyl7QgY" target="_blank" class="news-link">Voir la vidéo →</a>
+                    </div>
+                </div>
+
+                <!-- Card Article Substack -->
+                <div class="news-card">
+                    <div class="news-thumbnail">
+                        <img src="{{ asset('image/champions-monde.jpg') }}" alt="Champions du Monde">
+                    </div>
+                    <div class="news-content">
+                        <h3>Quelqu'un a dit Champions du Monde ?</h3>
+                        <a href="https://gentlemates.substack.com/p/quelquun-a-dit-champions-du-monde" target="_blank" class="news-link">Lire l'article →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
 
 {% block stylesheets %}
+{{ parent() }}
 <style>
 /* --- HERO --- */
 .hero {
     position: relative;
     width: 100%;
     height: 100vh;
-    background: url('{{ asset('image/M8-banner.jpg') }}') no-repeat center top/cover;
+    background: url('{{ asset('image/M8-banner.jpg') }}') no-repeat center center/cover;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -58,6 +105,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
 }
 
 .hero-content {
@@ -81,9 +129,41 @@
     letter-spacing: 2px;
 }
 
+/* --- BANDEROLE DE TRANSITION --- */
+.transition-banner {
+    background: #FFB3D9;
+    padding: 12px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.banner-content {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-infinite 30s linear infinite;
+}
+
+.banner-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+@keyframes scroll-infinite {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
 /* --- ABOUT --- */
 .about {
-    background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+    background: linear-gradient(180deg, rgb(80, 16, 110) 0%, rgba(133, 12, 127, 0.79) 50%, #0a0a0a 100%);
     color: white;
     padding: 120px 40px;
     text-align: center;
@@ -93,7 +173,7 @@
     font-size: 2.5rem;
     margin-bottom: 80px;
     text-transform: uppercase;
-    color: #f8b700;
+    color: rgba(197, 19, 158, 0.6);
     letter-spacing: 3px;
 }
 
@@ -131,6 +211,110 @@
     margin: 0;
 }
 
+/* --- LATEST NEWS --- */
+.news {
+    background: #0a0a0a;
+    padding: 120px 40px;
+}
+
+.news h2 {
+    font-size: 2.5rem;
+    margin-bottom: 60px;
+    text-align: center;
+    text-transform: uppercase;
+    color:rgba(197, 19, 158, 0.6);
+    letter-spacing: 3px;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.news-card {
+    background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.news-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(159, 44, 212, 0.6);
+}
+
+.news-thumbnail {
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+    position: relative;
+}
+
+.news-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.news-card:hover .news-thumbnail img {
+    transform: scale(1.1);
+}
+
+.news-thumbnail iframe {
+    border-radius: 0;
+}
+
+.news-content {
+    padding: 25px;
+}
+
+.news-tag {
+    display: inline-block;
+    background: rgba(197, 19, 158, 0.6);
+    color: #0a0a0a;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.news-content h3 {
+    font-size: 1.4rem;
+    color: white;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.news-content p {
+    color: #aaa;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.news-link {
+    display: inline-block;
+    color: rgba(197, 19, 158, 0.6);
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.news-link:hover {
+    color:rgb(154, 61, 240);
+    transform: translateX(5px);
+}
+
 /* Responsive */
 @media (max-width: 968px) {
     .about-content {
@@ -144,6 +328,10 @@
     
     .about-text {
         text-align: center;
+    }
+    
+    .banner-text {
+        font-size: 1rem;
     }
 }
 
@@ -169,6 +357,28 @@
     .about-text p {
         font-size: 1rem;
         line-height: 1.8;
+    }
+    
+    .banner-text {
+        font-size: 0.9rem;
+    }
+    
+    .transition-banner {
+        padding: 10px 0;
+    }
+    
+    .news {
+        padding: 80px 20px;
+    }
+    
+    .news h2 {
+        font-size: 2rem;
+        margin-bottom: 40px;
+    }
+    
+    .news-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
     }
 }
 </style>
