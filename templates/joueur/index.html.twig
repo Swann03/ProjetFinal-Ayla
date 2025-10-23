@@ -1,20 +1,232 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Hello JoueurController!{% endblock %}
+{% block title %}Joueurs - Gentlemates{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <!-- HERO SECTION -->
+    <section class="teams-hero">
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <h1>NOS JOUEURS</h1>
+            <p>Believe Your Culture, Believe YourSelf</p>
+        </div>
+    </section>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/xampp/htdocs/ProjetFinal-Ayla/src/Controller/JoueurController.php</code></li>
-        <li>Your template at <code>C:/xampp/htdocs/ProjetFinal-Ayla/templates/joueur/index.html.twig</code></li>
-    </ul>
-</div>
+    <!-- TEAMS GRID -->
+    <section class="teams-section">
+        <div class="container">
+            <h2 class="section-title">GAME SQUADS</h2>
+            
+            <div class="teams-grid">
+                {% for equipe in equipes %}
+                    <a href="{{ path('app_joueur_equipe', {id: equipe.id}) }}" class="team-card">
+                        <!-- IMAGE DE FOND DU JEU -->
+                        <div class="team-background" style="background-image: url('{{ asset('uploads/jeux/' ~ equipe.imageFond) }}');"></div>
+                        
+                        <div class="team-overlay"></div>
+                        
+                        <!-- CONTENU DE LA CARTE -->
+                        <div class="team-content">
+                            <img src="{{ asset('uploads/logos/' ~ equipe.logo) }}" alt="{{ equipe.nom }}" class="team-logo">
+                            <h3>{{ equipe.nom }}</h3>
+                        </div>
+                    </a>
+                {% else %}
+                    <p class="no-teams">Aucune équipe disponible</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 {% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+/* --- TEAMS HERO --- */
+.teams-hero {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    background: linear-gradient(135deg, rgba(80, 16, 110, 0.9), rgba(197, 19, 158, 0.7)), 
+                url('{{ asset('image/M8-banner.jpg') }}') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.teams-hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+.teams-hero .hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.teams-hero h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: 8px;
+    margin-bottom: 15px;
+}
+
+.teams-hero p {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    letter-spacing: 2px;
+}
+
+/* --- TEAMS SECTION --- */
+.teams-section {
+    background: #0a0a0a;
+    padding: 100px 40px;
+    min-height: 50vh;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 3rem;
+    color: rgba(197, 19, 158, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin-bottom: 60px;
+    font-weight: 800;
+}
+
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* --- CARTE D'ÉQUIPE AVEC IMAGE DE FOND --- */
+.team-card {
+    position: relative;
+    height: 400px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: white;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border: 2px solid rgba(197, 19, 158, 0.3);
+}
+
+/* Image de fond du jeu */
+.team-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.4s ease;
+}
+
+.team-card:hover .team-background {
+    transform: scale(1.1);
+}
+
+/* Overlay sombre */
+.team-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
+    transition: background 0.4s ease;
+}
+
+.team-card:hover .team-overlay {
+    background: linear-gradient(180deg, rgba(197, 19, 158, 0.4) 0%, rgba(0,0,0,0.9) 100%);
+}
+
+/* Contenu de la carte */
+.team-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 30px;
+}
+
+.team-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+    transition: all 0.4s ease;
+}
+
+.team-card:hover .team-logo {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 30px rgba(197, 19, 158, 1));
+}
+
+.team-content h3 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease;
+}
+
+.team-card:hover h3 {
+    color: rgba(197, 19, 158, 0.8);
+    transform: translateY(-5px);
+}
+
+.no-teams {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #666;
+    font-size: 1.2rem;
+    padding: 60px;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .teams-hero h1 {
+        font-size: 2.5rem;
+        letter-spacing: 4px;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .teams-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-card {
+        height: 350px;
+    }
+    
+    .team-logo {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .team-content h3 {
+        font-size: 2rem;
+    }
+}
+</style>
+{% endblock %}
+

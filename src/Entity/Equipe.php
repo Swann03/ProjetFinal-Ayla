@@ -24,6 +24,10 @@ class Equipe
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageFond = null;
+
+
     /**
      * @var Collection<int, Joueur>
      */
@@ -213,4 +217,16 @@ class Equipe
 
         return $this;
     }
+
+    public function getImageFond(): ?string
+    {
+        return $this->imageFond;
+    }
+
+    public function setImageFond(?string $imageFond): static
+    {
+        $this->imageFond = $imageFond;
+        return $this;
+    }
+
 }
