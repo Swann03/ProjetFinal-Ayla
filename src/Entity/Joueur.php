@@ -22,6 +22,9 @@ class Joueur
     #[ORM\ManyToOne(inversedBy: 'joueurs')]
     private ?Equipe $equipe = null;
 
+     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageFond = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,4 +65,17 @@ class Joueur
 
         return $this;
     }
+
+       public function getImageFond(): ?string
+    {
+        return $this->imageFond;
+    }
+
+        public function setImageFond(?string $imageFond): static
+    {
+        $this->imageFond = $imageFond;
+        return $this;
+    }
+
+
 }
