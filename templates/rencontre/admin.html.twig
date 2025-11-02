@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container" style="max-width:800px; margin:auto;">
+    <h1>Liste des rencontres</h1>
+
+   
+    <div id="form-container">
+        {{ form_start(form, {'attr': {'id': 'form-rencontre'}}) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+        {{ form_end(form) }}
+    </div>
+
+    <hr>
+
+    
+    <div id="liste-rencontres">
+        {% for rencontre in rencontres %}
+            <div style="margin-bottom:10px; padding:10px; background:#eee; border-radius:6px;">
+                {{ rencontre.jeu }} – {{ rencontre.date|date('d/m/Y H:i') }} – {{ rencontre.resultat }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.querySelector('#form-rencontre').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+        const div = document.createElement('div');
+        div.style.cssText = "margin-bottom:10px; padding:10px; background:#eee; border-radius:6px;";
+        div.innerHTML = `${data.jeu} – ${data.date} – ${data.resultat}`;
+        document.querySelector('#liste-rencontres').prepend(div);
+
+        form.reset(); 
+    }
+});
+</script>
+{% endblock %}

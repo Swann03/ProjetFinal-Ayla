@@ -10,15 +10,25 @@ class EquipeFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        $jeux = [
+            ['VALORANT', 'valorant.png', 'valorant.jpg'],
+            ['COUNTER STRIKE', 'cs.png', 'cs.jpg'],
+            ['FORTNITE', 'fortnite.png', 'fortnite.jpg'],
+            ['TEAMFIGHT TACTICS', 'tft.png', 'tft.jpg'],
+            ['AGE OF EMPIRES', 'aoe.png', 'aoe.jpg'],
+            ['ROCKET LEAGUE', 'rocket.png', 'rocket-league.jpg'],
+            ['CALL OF DUTY', 'cod.png', 'cod.jpg'],
+            ['CALL OF DUTY WARZONE', 'cod-warzone.png', 'cod-warzone.jpg'],
+        ];
 
-        for ($i = 1; $i <= 4; $i++) {
-            $gentlemates = new Equipe();
-            $gentlemates->setNom('Gentlemates'.$i);
-            $gentlemates->setDescription('Equipe forte'.$i);
-            $gentlemates->setLogo('logo'.$i . '.png');
-            $this->addReference('equipe'.$i, $gentlemates); 
-            $manager->persist($gentlemates);
+        foreach ($jeux as $jeu) {
+            $equipe = new Equipe();
+            $equipe->setNom($jeu[0]);
+            $equipe->setLogo($jeu[1]);
+            $equipe->setImageFond($jeu[2]);
+            $manager->persist($equipe);
         }
+
         $manager->flush();
     }
 }

@@ -18,7 +18,7 @@
             
             <div class="teams-grid">
                {% for equipe in equipes %}
-                <a href="{{ path('app_joueur_equipe', {id: equipe.id}) }}" class="team-card">
+                <a href="{{ path('app_equipe_detail', {id: equipe.id}) }}" class="team-card">
                     <!-- IMAGE DE FOND DU JEU -->
                     <div class="team-background" style="background-image: url('{{ asset('image/jeux/' ~ equipe.imageFond) }}');"></div>
                     

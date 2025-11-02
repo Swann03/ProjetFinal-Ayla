@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des joueurs{% endblock %}
+
+{% block body %}
+<h1>Liste des joueurs</h1>
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Pseudo</th>
+            <th>Nom</th>
+            <th>Équipe</th>
+            <th>Bio</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for joueur in joueurs %}
+            <tr>
+                <td>{{ joueur.pseudo }}</td>
+                <td>{{ joueur.nom }}</td>
+                <td>{{ joueur.equipe.nom }}</td>
+                <td>{{ joueur.bio }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucun joueur enregistré.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ path('app_equipe') }}" 
+   style="display:inline-block;margin-top:20px;padding:10px 20px;background:purple;color:white;text-decoration:none;border-radius:5px;">
+   Retour aux équipes
+</a>
+{% endblock %}

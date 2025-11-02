@@ -21,12 +21,14 @@ class Equipe
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageFond = null;
 
+    #[ORM\ManyToOne(targetEntity: Club::class, inversedBy: 'equipes')]
+    private ?Club $club = null;
 
     /**
      * @var Collection<int, Joueur>
@@ -43,7 +45,8 @@ class Equipe
     /**
      * @var Collection<int, Rencontre>
      */
-    #[ORM\ManyToMany(targetEntity: Rencontre::class, mappedBy: 'equipe')]
+    #[ORM\ManyToMany(targetEntity: Rencontre::class, inversedBy: 'equipes')]
+    #[ORM\JoinTable(name: 'equipe_rencontre')]
     private Collection $rencontres;
 
     /**
@@ -73,7 +76,6 @@ class Equipe
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -82,10 +84,9 @@ class Equipe
         return $this->logo;
     }
 
-    public function setLogo(string $logo): static
+    public function setLogo(?string $logo): static
     {
         $this->logo = $logo;
-
         return $this;
     }
 
@@ -94,10 +95,9 @@ class Equipe
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -115,49 +115,39 @@ class Equipe
             $this->joueurs->add($joueur);
             $joueur->setEquipe($this);
         }
-
         return $this;
     }
 
     public function removeJoueur(Joueur $joueur): static
     {
-        if ($this->joueurs->removeElement($joueur)) {
-            // set the owning side to null (unless already changed)
-            if ($joueur->getEquipe() === $this) {
-                $joueur->setEquipe(null);
-            }
+        if ($this->joueurs->removeElement($joueur) && $joueur->getEquipe() === $this) {
+            $joueur->setEquipe(null);
         }
-
         return $this;
     }
 
     /**
-     * @return Collection<int, media>
+     * @return Collection<int, Media>
      */
     public function getMedia(): Collection
     {
         return $this->media;
     }
 
-    public function addMedium(media $medium): static
+    public function addMedium(Media $medium): static
     {
         if (!$this->media->contains($medium)) {
             $this->media->add($medium);
             $medium->setEquipe($this);
         }
-
         return $this;
     }
 
-    public function removeMedium(media $medium): static
+    public function removeMedium(Media $medium): static
     {
-        if ($this->media->removeElement($medium)) {
-            // set the owning side to null (unless already changed)
-            if ($medium->getEquipe() === $this) {
-                $medium->setEquipe(null);
-            }
+        if ($this->media->removeElement($medium) && $medium->getEquipe() === $this) {
+            $medium->setEquipe(null);
         }
-
         return $this;
     }
 
@@ -173,18 +163,16 @@ class Equipe
     {
         if (!$this->rencontres->contains($rencontre)) {
             $this->rencontres->add($rencontre);
-            $rencontre->addRencontre($this);
+            $rencontre->addEquipe($this);
         }
-
         return $this;
     }
 
     public function removeRencontre(Rencontre $rencontre): static
     {
         if ($this->rencontres->removeElement($rencontre)) {
-            $rencontre->removeRencontre($this);
+            $rencontre->removeEquipe($this);
         }
-
         return $this;
     }
 
@@ -200,21 +188,16 @@ class Equipe
     {
         if (!$this->votes->contains($vote)) {
             $this->votes->add($vote);
-            $vote->setVote($this);
+            $vote->setEquipe($this);
         }
-
         return $this;
     }
 
     public function removeVote(Vote $vote): static
     {
-        if ($this->votes->removeElement($vote)) {
-            // set the owning side to null (unless already changed)
-            if ($vote->getVote() === $this) {
-                $vote->setVote(null);
-            }
+        if ($this->votes->removeElement($vote) && $vote->getEquipe() === $this) {
+            $vote->setEquipe(null);
         }
-
         return $this;
     }
 
@@ -229,4 +212,14 @@ class Equipe
         return $this;
     }
 
+    public function getClub(): ?Club
+    {
+        return $this->club;
+    }
+
+    public function setClub(?Club $club): static
+    {
+        $this->club = $club;
+        return $this;
+    }
 }

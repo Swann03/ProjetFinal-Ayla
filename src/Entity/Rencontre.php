@@ -6,7 +6,6 @@ use App\Repository\RencontreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: RencontreRepository::class)]
 class Rencontre
@@ -16,7 +15,7 @@ class Rencontre
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'datetime', nullable: false)] 
+    #[ORM\Column(type: 'datetime', nullable: false)]
     private ?\DateTime $date = null;
 
     #[ORM\Column(length: 255)]
@@ -25,19 +24,17 @@ class Rencontre
     #[ORM\Column(length: 255)]
     private ?string $jeu = null;
 
-   
-
     /**
      * @var Collection<int, Equipe>
      */
-    #[ORM\ManyToMany(targetEntity: Equipe::class, inversedBy: 'equipe')]
-    private Collection $rencontre;
+    #[ORM\ManyToMany(targetEntity: Equipe::class, mappedBy: 'rencontres')]
+    private Collection $equipes;
 
     /**
      * @var Collection<int, Vote>
      */
     #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'rencontre', cascade: ['persist', 'remove'])]
-    private Collection $rencontreVote;
+    private Collection $votes;
 
     /**
      * @var Collection<int, Statistique>
@@ -45,13 +42,10 @@ class Rencontre
     #[ORM\OneToMany(targetEntity: Statistique::class, mappedBy: 'rencontre', cascade: ['persist', 'remove'])]
     private Collection $statistiques;
 
-   
-
-
     public function __construct()
     {
-        $this->rencontre = new ArrayCollection();
-        $this->rencontreVote = new ArrayCollection();
+        $this->equipes = new ArrayCollection();
+        $this->votes = new ArrayCollection();
         $this->statistiques = new ArrayCollection();
     }
 
@@ -96,48 +90,49 @@ class Rencontre
     /**
      * @return Collection<int, Equipe>
      */
-    public function getRencontre(): Collection
+    public function getEquipes(): Collection
     {
-        return $this->rencontre;
+        return $this->equipes;
     }
 
-    public function addRencontre(Equipe $rencontre): static
+    public function addEquipe(Equipe $equipe): static
     {
-        if (!$this->rencontre->contains($rencontre)) {
-            $this->rencontre->add($rencontre);
+        if (!$this->equipes->contains($equipe)) {
+            $this->equipes->add($equipe);
+            $equipe->addRencontre($this);
         }
         return $this;
     }
 
-    public function removeRencontre(Equipe $rencontre): static
+    public function removeEquipe(Equipe $equipe): static
     {
-        $this->rencontre->removeElement($rencontre);
+        if ($this->equipes->removeElement($equipe)) {
+            $equipe->removeRencontre($this);
+        }
         return $this;
     }
 
     /**
      * @return Collection<int, Vote>
      */
-    public function getRencontreVote(): Collection
+    public function getVotes(): Collection
     {
-        return $this->rencontreVote;
+        return $this->votes;
     }
 
-    public function addRencontreVote(Vote $rencontreVote): static
+    public function addVote(Vote $vote): static
     {
-        if (!$this->rencontreVote->contains($rencontreVote)) {
-            $this->rencontreVote->add($rencontreVote);
-            $rencontreVote->setRencontre($this);
+        if (!$this->votes->contains($vote)) {
+            $this->votes->add($vote);
+            $vote->setRencontre($this);
         }
         return $this;
     }
 
-    public function removeRencontreVote(Vote $rencontreVote): static
+    public function removeVote(Vote $vote): static
     {
-        if ($this->rencontreVote->removeElement($rencontreVote)) {
-            if ($rencontreVote->getRencontre() === $this) {
-                $rencontreVote->setRencontre(null);
-            }
+        if ($this->votes->removeElement($vote) && $vote->getRencontre() === $this) {
+            $vote->setRencontre(null);
         }
         return $this;
     }
@@ -161,10 +156,8 @@ class Rencontre
 
     public function removeStatistique(Statistique $statistique): static
     {
-        if ($this->statistiques->removeElement($statistique)) {
-            if ($statistique->getRencontre() === $this) {
-                $statistique->setRencontre(null);
-            }
+        if ($this->statistiques->removeElement($statistique) && $statistique->getRencontre() === $this) {
+            $statistique->setRencontre(null);
         }
         return $this;
     }

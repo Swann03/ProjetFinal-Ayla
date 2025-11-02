@@ -1,0 +1,385 @@
+{% extends 'base.html.twig' %}
+{% block title %}Match - Gentlemates{% endblock %}
+
+{% block body %}
+    <section class="match-detail">
+        <div class="container">
+            <div class="navbar-spacer"></div>
+            
+            <div class="match-header">
+                <h1>{{ rencontre.getJeu() }}</h1>
+                <p class="match-date">{{ rencontre.getDate()|date('d/m/Y H:i') }}</p>
+            </div>
+
+            <div class="match-teams">
+                {% set equipes = rencontre.getRencontre() %}
+                
+                {% if equipes|length >= 2 %}
+                    {% set equipesList = equipes %}
+                    <div class="team-matchup">
+                        <!-- ÉQUIPE 1 -->
+                        <div class="team-card team-1">
+                            <img src="{{ asset('image/' ~ equipesList[0].getLogo()) }}" alt="{{ equipesList[0].getNom() }}" class="team-logo">
+                            <h2>{{ equipesList[0].getNom() }}</h2>
+                            
+                            <!-- JOUEURS - SEULEMENT POUR GENTLEMATES -->
+                            <div class="team-players">
+                                {% if equipesList[0].getNom() == 'Gentlemates' and equipesList[0].getJoueurs()|length > 0 %}
+                                    <h4>Roster</h4>
+                                    <div class="players-list">
+                                        {% for joueur in equipesList[0].getJoueurs() %}
+                                            <div class="player-item">
+                                                <img src="{{ asset('image/' ~ joueur.getImageFond()) }}" alt="{{ joueur.getNom() }}" class="player-avatar">
+                                                <span class="player-name">{{ joueur.getNom() }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p class="no-players">Équipe adverse</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="vote-stats">
+                                <p class="vote-count">{{ voteCounts[equipesList[0].getId()]|default(0) }} votes</p>
+                                {% if totalVotes > 0 %}
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: {{ (voteCounts[equipesList[0].getId()]|default(0) / totalVotes * 100)|round }}%"></div>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- ÉTOILES POUR VOTER -->
+                            <div class="star-rating" data-equipe-id="{{ equipesList[0].getId() }}">
+                                <span class="star" data-value="1">⭐</span>
+                                <span class="star" data-value="2">⭐</span>
+                                <span class="star" data-value="3">⭐</span>
+                                <span class="star" data-value="4">⭐</span>
+                                <span class="star" data-value="5">⭐</span>
+                            </div>
+                        </div>
+
+                        <div class="vs-separator">VS</div>
+
+                        <!-- ÉQUIPE 2 -->
+                        <div class="team-card team-2">
+                            <img src="{{ asset('image/' ~ equipesList[1].getLogo()) }}" alt="{{ equipesList[1].getNom() }}" class="team-logo">
+                            <h2>{{ equipesList[1].getNom() }}</h2>
+                            
+                            <!-- JOUEURS - SEULEMENT POUR GENTLEMATES -->
+                            <div class="team-players">
+                                {% if equipesList[1].getNom() == 'Gentlemates' and equipesList[1].getJoueurs()|length > 0 %}
+                                    <h4>Roster</h4>
+                                    <div class="players-list">
+                                        {% for joueur in equipesList[1].getJoueurs() %}
+                                            <div class="player-item">
+                                                <img src="{{ asset('image/' ~ joueur.getImageFond()) }}" alt="{{ joueur.getNom() }}" class="player-avatar">
+                                                <span class="player-name">{{ joueur.getNom() }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p class="no-players">Équipe adverse</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="vote-stats">
+                                <p class="vote-count">{{ voteCounts[equipesList[1].getId()]|default(0) }} votes</p>
+                                {% if totalVotes > 0 %}
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: {{ (voteCounts[equipesList[1].getId()]|default(0) / totalVotes * 100)|round }}%"></div>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- ÉTOILES POUR VOTER -->
+                            <div class="star-rating" data-equipe-id="{{ equipesList[1].getId() }}">
+                                <span class="star" data-value="1">⭐</span>
+                                <span class="star" data-value="2">⭐</span>
+                                <span class="star" data-value="3">⭐</span>
+                                <span class="star" data-value="4">⭐</span>
+                                <span class="star" data-value="5">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="back-link">
+                <a href="{{ path('app_rencontre') }}" class="btn-back">← Retour</a>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .match-detail {
+            background: #0a0a0a;
+            padding: 60px 40px;
+            min-height: 100vh;
+        }
+
+        .navbar-spacer {
+            height: 100px;
+        }
+
+        .match-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .match-header h1 {
+            font-size: 3.5rem;
+            color: rgba(197, 19, 158, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+        }
+
+        .match-date {
+            font-size: 1.3rem;
+            color: #ddd;
+        }
+
+        .match-teams {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+        }
+
+        .team-matchup {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .team-card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 2px solid rgba(197, 19, 158, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            border-color: rgba(197, 19, 158, 0.8);
+            box-shadow: 0 10px 40px rgba(197, 19, 158, 0.2);
+        }
+
+        .team-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+
+        .team-card h2 {
+            font-size: 2rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        /* JOUEURS */
+        .team-players {
+            margin-bottom: 30px;
+        }
+
+        .team-players h4 {
+            color: rgba(197, 19, 158, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .no-players {
+            color: #888;
+            font-style: italic;
+            margin: 10px 0 20px 0;
+        }
+
+        .players-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .player-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(197, 19, 158, 0.1);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .player-item:hover {
+            background: rgba(197, 19, 158, 0.2);
+        }
+
+        .player-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .player-name {
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .vote-stats {
+            margin-bottom: 30px;
+        }
+
+        .vote-count {
+            font-size: 1.5rem;
+            color: rgba(197, 19, 158, 1);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(197, 19, 158, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, rgba(197, 19, 158, 0.6), rgba(197, 19, 158, 1));
+            transition: width 0.5s ease;
+        }
+
+        /* ÉTOILES */
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-size: 2.5rem;
+        }
+
+        .star {
+            cursor: pointer;
+            opacity: 0.4;
+            transition: all 0.2s ease;
+            filter: brightness(0.8);
+        }
+
+        .star:hover,
+        .star.active {
+            opacity: 1;
+            filter: brightness(1.2);
+            transform: scale(1.2);
+        }
+
+        .vs-separator {
+            font-size: 2.5rem;
+            color: rgba(197, 19, 158, 0.6);
+            font-weight: bold;
+            text-align: center;
+            align-self: center;
+        }
+
+        .back-link {
+            text-align: center;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 12px 25px;
+            background: rgba(197, 19, 158, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid rgba(197, 19, 158, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(197, 19, 158, 0.6);
+            border-color: rgba(197, 19, 158, 1);
+        }
+
+        @media (max-width: 768px) {
+            .team-matchup {
+                grid-template-columns: 1fr;
+            }
+
+            .vs-separator {
+                margin: 20px 0;
+            }
+
+            .match-header h1 {
+                font-size: 2rem;
+            }
+
+            .players-list {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .player-item {
+                flex: 1;
+                min-width: 100px;
+            }
+        }
+    </style>
+
+    <script>
+        document.querySelectorAll('.star-rating').forEach(rating => {
+            const stars = rating.querySelectorAll('.star');
+            const equipeId = rating.dataset.equipeId;
+
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const points = this.dataset.value;
+                    vote(equipeId, points);
+                });
+
+                star.addEventListener('mouseover', function() {
+                    stars.forEach(s => {
+                        if (s.dataset.value <= this.dataset.value) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            rating.addEventListener('mouseout', function() {
+                stars.forEach(s => s.classList.remove('active'));
+            });
+        });
+
+        function vote(equipeId, points) {
+            fetch("{{ path('app_rencontre_vote', {'id': rencontre.id}) }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: `equipe_id=${equipeId}&points=${points}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Vote enregistré !');
+                    location.reload();
+                } else {
+                    alert('❌ ' + data.message);
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        }
+    </script>
+{% endblock %}

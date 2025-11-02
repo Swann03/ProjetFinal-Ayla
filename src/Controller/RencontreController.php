@@ -15,31 +15,40 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class RencontreController extends AbstractController
 {
     #[Route('/rencontre', name: 'app_rencontre', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function publique(RencontreRepository $rencontreRepository): Response
-    {
-        $rencontres = $rencontreRepository->findBy([], [
-            'date' => 'DESC'
-        ]);
+public function publique(RencontreRepository $rencontreRepository): Response
+{
+    $rencontres = $rencontreRepository->findBy([], ['date' => 'DESC']);
+    $now = new \DateTime();
 
-        
-        $rencontresParJeu = [];
-        foreach ($rencontres as $rencontre){
-            $jeu = $rencontre->getJeu();
-            if(!isset($rencontresParJeu[$jeu])){
-                $rencontresParJeu[$jeu] = [];
-            }
-            $rencontresParJeu[$jeu][] = $rencontre;
+    $rencontresParJeu = [];
+
+    foreach ($rencontres as $rencontre) {
+        $jeu = $rencontre->getJeu();
+
+        // Si la clé du jeu n'existe pas encore, on l'initialise
+        if (!isset($rencontresParJeu[$jeu])) {
+            $rencontresParJeu[$jeu] = [
+                'avenir' => [],
+                'termines' => [],
+            ];
         }
 
-        return $this->render('rencontre/publique.html.twig', [
-            'rencontresParJeu' => $rencontresParJeu,
-        ]);
+        // Classement selon la date
+        if ($rencontre->getDate() > $now) {
+            $rencontresParJeu[$jeu]['avenir'][] = $rencontre;
+        } else {
+            $rencontresParJeu[$jeu]['termines'][] = $rencontre;
+        }
     }
 
+    return $this->render('rencontre/publique.html.twig', [
+        'rencontresParJeu' => $rencontresParJeu,
+    ]);
+}
 
-    #[Route('/rencontre/ajouter', name: 'app_rencontre_ajouter', methods: ['POST'])]
-    
+
+    #[Route('/rencontre/ajouter', name: 'app_rencontre_ajouter', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function ajouter(Request $request, EntityManagerInterface $em): Response
     {
         $rencontre = new Rencontre();
@@ -50,36 +59,15 @@ final class RencontreController extends AbstractController
             $em->persist($rencontre);
             $em->flush();
 
-            if ($request->isXmlHttpRequest()) {
-                return $this->json([
-                    'success' => true,
-                    'id' => $rencontre->getId(),
-                    'jeu' => $rencontre->getJeu(),
-                    'resultat' => $rencontre->getResultat(),
-                    'date' => $rencontre->getDate()->format('d/m/Y H:i')
-                ]);
-            }
-
-            $this->addFlash('success', 'Rencontre ajoutée avec succès !');
+            $this->addFlash('success', '✅ Rencontre ajoutée avec succès.');
             return $this->redirectToRoute('app_rencontre');
         }
 
-       
-        if ($request->isXmlHttpRequest() && $form->isSubmitted()) {
-            $errors = [];
-            foreach ($form->getErrors(true) as $error) {
-                $errors[] = $error->getMessage();
-            }
-            
-            return $this->json([
-                'success' => false,
-                'errors' => $errors
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        return $this->redirectToRoute('app_rencontre');
+        return $this->render('rencontre/ajouter.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
-    
+
     #[Route('/rencontre/{id}', name: 'app_rencontre_show', methods: ['GET'])]
     public function show(Rencontre $rencontre): Response
     {
@@ -87,4 +75,4 @@ final class RencontreController extends AbstractController
             'rencontre' => $rencontre,
         ]);
     }
- }
+}

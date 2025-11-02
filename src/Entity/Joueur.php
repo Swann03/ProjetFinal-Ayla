@@ -16,14 +16,14 @@ class Joueur
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
     private ?string $bio = null;
 
     #[ORM\ManyToOne(inversedBy: 'joueurs')]
     private ?Equipe $equipe = null;
 
-     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $imageFond = null;
+    #[ORM\Column(length: 255)]
+    private ?string $pseudo = null;
 
     public function getId(): ?int
     {
@@ -66,16 +66,15 @@ class Joueur
         return $this;
     }
 
-       public function getImageFond(): ?string
+    public function getPseudo(): ?string
     {
-        return $this->imageFond;
+        return $this->pseudo;
     }
 
-        public function setImageFond(?string $imageFond): static
+    public function setPseudo(string $pseudo): static
     {
-        $this->imageFond = $imageFond;
+        $this->pseudo = $pseudo;
+
         return $this;
     }
-
-
 }

@@ -64,6 +64,7 @@
     max-width: 900px;
     margin: 0 auto;
     padding: 40px;
+    overflow: visible; /* indispensable pour voir les hotspots */
 }
 
 .team-photo {
@@ -73,7 +74,7 @@
     filter: drop-shadow(0 20px 60px rgba(197, 19, 158, 0.4));
 }
 
-/* --- HOTSPOTS LÉGERS ROSES --- */
+/* --- HOTSPOTS VISIBLES ET ACTIFS --- */
 .player-hotspot-invisible {
     position: absolute;
     transform: translate(-50%, -50%);
@@ -82,35 +83,35 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: rgba(197, 19, 158, 0.15);
-    border: 2px solid rgba(197, 19, 158, 0.3);
+    background: rgba(197, 19, 158, 0.5); /* plus visible */
+    border: 2px solid rgba(197, 19, 158, 0.8);
+    box-shadow: 0 0 15px rgba(197, 19, 158, 0.7);
     transition: all 0.3s ease;
 }
 
 .player-hotspot-invisible:hover {
-    background: rgba(197, 19, 158, 0.3);
-    border: 2px solid rgba(197, 19, 158, 0.6);
-    box-shadow: 0 0 20px rgba(197, 19, 158, 0.4);
+    background: rgba(197, 19, 158, 0.9);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
 }
 
 .hotspot-label {
     position: absolute;
-    top: -40px;
+    top: -45px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.9);
-    color: rgba(197, 19, 158, 1);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
     padding: 8px 16px;
     border-radius: 8px;
     font-weight: bold;
     font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
     white-space: nowrap;
     opacity: 0;
-    transition: opacity 0.3s ease;
     pointer-events: none;
-    border: 2px solid rgba(197, 19, 158, 0.6);
+    border: 2px solid rgba(197, 19, 158, 0.7);
+    transition: opacity 0.3s ease;
 }
 
 .player-hotspot-invisible:hover .hotspot-label {

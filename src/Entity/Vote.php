@@ -17,27 +17,17 @@ class Vote
     #[ORM\Column(nullable: true)]
     private ?int $point = null;
 
-    #[ORM\ManyToOne(inversedBy: 'EquipeVote')]
+    #[ORM\ManyToOne(targetEntity: Equipe::class, inversedBy: 'votes')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Equipe $equipe = null;
 
-    #[ORM\ManyToOne(inversedBy: 'rencontreVote')]
+    #[ORM\ManyToOne(targetEntity: Rencontre::class, inversedBy: 'votes')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Rencontre $rencontre = null;
 
     #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
-    #[ORM\JoinColumn(nullable:true)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Utilisateur $utilisateur = null;
-
-    public function getUtilisateur(): ?Utilisateur
-    {
-        return $this->utilisateur;
-    }
-
-    public function setUtilisateur(?Utilisateur $utilisateur): static
-    {
-        $this->utilisateur = $utilisateur;
-
-        return $this;
-    }
 
     public function getId(): ?int
     {
@@ -52,7 +42,6 @@ class Vote
     public function setPoint(?int $point): static
     {
         $this->point = $point;
-
         return $this;
     }
 
@@ -64,7 +53,6 @@ class Vote
     public function setEquipe(?Equipe $equipe): static
     {
         $this->equipe = $equipe;
-
         return $this;
     }
 
@@ -76,7 +64,17 @@ class Vote
     public function setRencontre(?Rencontre $rencontre): static
     {
         $this->rencontre = $rencontre;
+        return $this;
+    }
 
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
         return $this;
     }
 }

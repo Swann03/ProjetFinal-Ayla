@@ -17,12 +17,12 @@ class StatistiqueFixtures extends Fixture
 
         $rencontres = $manager->getRepository(Rencontre::class)->findAll();
 
-        for ($i = 0; $i < 20; $i++) { 
+        for ($i = 0; $i < 5; $i++) { 
             $stat = new Statistique();
 
-            $stat->setKillCount($faker->numberBetween(0, 20));   
-            $stat->setDeadCount($faker->numberBetween(0, 20));   
-            $stat->setAssistCount($faker->numberBetween(0, 20)); 
+            $stat->setKillCount($faker->numberBetween(0, 5));   
+            $stat->setDeadCount($faker->numberBetween(0, 5));   
+            $stat->setAssistCount($faker->numberBetween(0, 5)); 
             $stat->setRencontre($rencontres[$i]);
 
             $manager->persist($stat);
