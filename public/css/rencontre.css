@@ -1,0 +1,167 @@
+/* === SECTION PRINCIPALE === */
+.matches-section {
+    background: #0a0a0a;
+    padding: 60px 20px;
+    min-height: 100vh;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.navbar-spacer {
+    height: 100px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 3rem;
+    color: rgba(197, 19, 158, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 50px;
+    font-weight: 800;
+}
+
+/* === FILTRE DES JEUX === */
+.jeu-filter {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: rgba(197, 19, 158, 0.1);
+    color: rgba(197, 19, 158, 0.7);
+    border: 2px solid rgba(197, 19, 158, 0.3);
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.filter-btn:hover {
+    border-color: rgba(197, 19, 158, 0.8);
+    color: rgba(197, 19, 158, 1);
+}
+
+.filter-btn.active {
+    background: rgba(197, 19, 158, 0.6);
+    color: white;
+    border-color: rgba(197, 19, 158, 1);
+    box-shadow: 0 0 20px rgba(197, 19, 158, 0.4);
+}
+
+/* === LISTE DE MATCHS === */
+.jeu-section {
+    margin-bottom: 80px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.match-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* === CHAQUE MATCH === */
+.match-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #111;
+    border: 1px solid rgba(197, 19, 158, 0.25);
+    border-radius: 10px;
+    padding: 15px 30px;
+    transition: none; /* pas d'effet de survol */
+}
+
+/* Lignes légèrement séparées visuellement */
+.match-row:not(:last-child) {
+    border-bottom: 2px solid rgba(197, 19, 158, 0.15);
+}
+
+/* === DATE === */
+.match-date {
+    color: rgba(197, 19, 158, 1);
+    font-weight: 600;
+    font-size: 0.95rem;
+    width: 180px;
+    text-align: left;
+}
+
+/* === BLOCS D’ÉQUIPES === */
+.match-teams {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    flex: 1;
+    text-align: center;
+}
+
+.team {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 220px;
+}
+
+/* === LOGOS & NOMS === */
+.team-logo {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+.team-name {
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
+/* === SCORE / VS === */
+.score {
+    display: inline-block;
+    width: 80px;
+    text-align: center;
+    font-weight: bold;
+    color: rgba(197, 19, 158, 0.9);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .match-row {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .match-teams {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .team {
+        min-width: unset;
+    }
+
+    .match-date {
+        width: auto;
+        text-align: center;
+    }
+}

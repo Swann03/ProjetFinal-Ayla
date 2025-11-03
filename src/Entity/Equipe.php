@@ -27,9 +27,8 @@ class Equipe
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageFond = null;
 
-    #[ORM\ManyToOne(targetEntity: Club::class, inversedBy: 'equipes')]
-    private ?Club $club = null;
-
+    #[ORM\Column(name: 'is_adversaire', type: 'boolean', options: ['default' => false])]
+    private ?bool $isAdversaire = false;
     /**
      * @var Collection<int, Joueur>
      */
@@ -212,14 +211,16 @@ class Equipe
         return $this;
     }
 
-    public function getClub(): ?Club
+    public function getIsAdversaire(): ?bool
     {
-        return $this->club;
+        return $this->isAdversaire;
     }
 
-    public function setClub(?Club $club): static
+    public function setIsAdversaire(bool $isAdversaire): static
     {
-        $this->club = $club;
+        $this->isAdversaire = $isAdversaire;
+
         return $this;
     }
+   
 }

@@ -2,395 +2,96 @@
 {% block title %}Matchs - Gentlemates{% endblock %}
 
 {% block body %}
-    <section class="matches-section">
-        <div class="container">
-            <!-- ESPACEMENT POUR LA NAVBAR -->
-            <div class="navbar-spacer"></div>
-            
-            <h1 class="section-title">MATCHS</h1>
+<section class="matches-section">
+    <div class="container">
+        <div class="navbar-spacer"></div>
+        <h1 class="section-title">MATCHS</h1>
 
-            <!-- FILTRE PAR JEU -->
-            <div class="jeu-filter">
-                <button class="filter-btn active" onclick="filterJeu('all')">
-                    <span>TOUS</span>
+        <!-- FILTRE PAR JEU -->
+        <div class="jeu-filter">
+            <button class="filter-btn active" onclick="filterJeu('all', event)">
+                <span>TOUS</span>
+            </button>
+            {% for jeu in rencontresParJeu|keys %}
+                <button class="filter-btn" onclick="filterJeu('{{ jeu|replace({' ': '-'}) }}', event)">
+                    <span>{{ jeu }}</span>
                 </button>
-                {% for jeu in rencontresParJeu|keys %}
-                    <button class="filter-btn" onclick="filterJeu('{{ jeu|replace({' ': '-'}) }}')">
-                        <span>{{ jeu }}</span>
-                    </button>
-                {% endfor %}
-            </div>
-
-            <!-- SECTIONS PAR JEU -->
-            {% for jeu, data in rencontresParJeu %}
-                <div class="jeu-section" data-jeu="{{ jeu|replace({' ': '-'}) }}">
-                    <div class="jeu-header">
-                        <h2 class="jeu-title">{{ jeu }}</h2>
-                    </div>
-
-                    {# MATCHS À VENIR #}
-                    {% if data.avenir|length > 0 %}
-                        <div class="matches-upcoming">
-                            <h3 class="upcoming-title">À VENIR</h3>
-                            <div class="matches-list">
-                                {% for match in data.avenir %}
-                                    <div class="match-card upcoming">
-                                        <div class="match-date">
-                                            {{ match.getDate()|date('d/m/Y') }}
-                                            <span class="match-time">{{ match.getDate()|date('H:i') }}</span>
-                                        </div>
-
-                                        <div class="match-teams">
-                                            {% set equipes = match.getEquipes() %}
-                                            {% if equipes|length >= 2 %}
-                                                {% set equipesList = equipes %}
-                                                <div class="team-vs">
-                                                    <div class="team-info">
-                                                        <img src="{{ asset('image/' ~ equipesList[0].getLogo()) }}" alt="{{ equipesList[0].getNom() }}" class="team-logo-small">
-                                                        <span class="team-name">{{ equipesList[0].getNom() }}</span>
-                                                    </div>
-                                                    <span class="vs-text">VS</span>
-                                                    <div class="team-info">
-                                                        <span class="team-name">{{ equipesList[1].getNom() }}</span>
-                                                        <img src="{{ asset('image/' ~ equipesList[1].getLogo()) }}" alt="{{ equipesList[1].getNom() }}" class="team-logo-small">
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-
-                                        <a href="{{ path('app_rencontre_show', {'id': match.id}) }}" class="btn-vote-link">
-                                            VOTER
-                                        </a>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    {# MATCHS PASSÉS #}
-                    {% if data.termines|length > 0 %}
-                        <div class="matches-past">
-                            <h3 class="past-title">RÉSULTATS</h3>
-                            <div class="matches-list">
-                                {% for match in data.termines %}
-                                    <div class="match-card past">
-                                        <div class="match-date">
-                                            {{ match.getDate()|date('d/m/Y') }}
-                                        </div>
-
-                                        <div class="match-teams">
-                                            {% set equipes = match.getEquipes() %}
-                                            {% if equipes|length >= 2 %}
-                                                {% set equipesList = equipes %}
-                                                <div class="team-vs">
-                                                    <div class="team-info">
-                                                        <img src="{{ asset('image/' ~ equipesList[0].getLogo()) }}" alt="{{ equipesList[0].getNom() }}" class="team-logo-small">
-                                                        <span class="team-name">{{ equipesList[0].getNom() }}</span>
-                                                    </div>
-                                                    <span class="vs-text">{{ match.getResultat() }}</span>
-                                                    <div class="team-info">
-                                                        <span class="team-name">{{ equipesList[1].getNom() }}</span>
-                                                        <img src="{{ asset('image/' ~ equipesList[1].getLogo()) }}" alt="{{ equipesList[1].getNom() }}" class="team-logo-small">
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-
-                                        <a href="{{ path('app_rencontre_show', {'id': match.id}) }}" class="btn-see-link">
-                                            VOIR
-                                        </a>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
             {% endfor %}
-
-            {% if rencontresParJeu|length == 0 %}
-                <p class="no-matches">Aucun match pour le moment</p>
-            {% endif %}
         </div>
-    </section>
 
-    <style>
-        .matches-section {
-            background: #0a0a0a;
-            padding: 40px;
-            min-height: 100vh;
-        }
+        <!-- SECTIONS PAR JEU -->
+        {% for jeu, data in rencontresParJeu %}
+            <div class="jeu-section" data-jeu="{{ jeu|replace({' ': '-'}) }}">
+                <h2 class="jeu-title">{{ jeu }}</h2>
 
-        /* ESPACEMENT POUR LA NAVBAR FIXE */
-        .navbar-spacer {
-            height: 100px;
-            width: 100%;
-        }
+                {# MATCHS À VENIR #}
+                {% if data.avenir is defined and data.avenir|length > 0 %}
+                    <h3 class="upcoming-title">À VENIR</h3>
+                    <div class="match-list">
+                        {% for match in data.avenir %}
+                            {% set equipes = match.getEquipes() %}
+                            {% if equipes|length >= 2 %}
+                                <div class="match-row upcoming">
+                                    <div class="match-date">
+                                       {{ match.getDate()|date('d') }} 
+                                        {{ ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'][match.getDate()|date('n')-1] }} 
+                                        {{ match.getDate()|date('Y') }}
 
-        .section-title {
-            text-align: center;
-            font-size: 3.5rem;
-            color: rgba(197, 19, 158, 0.8);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 60px;
-            font-weight: 800;
-        }
+                                    </div>
+                                    <div class="match-teams">
+                                        <div class="team">
+                                            <img src="{{ asset('image/logos/' ~ equipes[0].getLogo()) }}" alt="{{ equipes[0].getNom() }}" class="team-logo">
+                                            <span class="team-name">{{ equipes[0].getNom() }}</span>
+                                        </div>
+                                        <span class="vs">VS</span>
+                                        <div class="team">
+                                            <span class="team-name">{{ equipes[1].getNom() }}</span>
+                                            <img src="{{ asset('image/logos/' ~ equipes[1].getLogo()) }}" alt="{{ equipes[1].getNom() }}" class="team-logo">
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
-        /* FILTRE */
-        .jeu-filter {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 60px;
-            flex-wrap: wrap;
-        }
+                {# MATCHS TERMINÉS #}
+                    {% if data.termines is defined and data.termines|length > 0 %}
+                        <h3 class="past-title">RÉSULTATS</h3>
+                        <div class="match-list">
+                            {% for match in data.termines %}
+                                {% set equipes = match.getEquipes() %}
+                                {% if equipes|length >= 2 %}
+                                    <div class="match-row past">
+                                        <div class="match-date">
+                                            {{ match.getDate()|date('d') }} 
+                                            {{ ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'][match.getDate()|date('n')-1] }} 
+                                            {{ match.getDate()|date('Y') }}
+                                        </div>
 
-        .filter-btn {
-            background: rgba(197, 19, 158, 0.1);
-            color: rgba(197, 19, 158, 0.7);
-            border: 2px solid rgba(197, 19, 158, 0.3);
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-        }
+                                        <div class="match-teams">
+                                            <div class="team">
+                                                <img src="{{ asset('image/logos/' ~ equipes[0].getLogo()) }}" alt="{{ equipes[0].getNom() }}" class="team-logo">
+                                                <span class="team-name">{{ equipes[0].getNom() }}</span>
+                                            </div>
+                                            <span class="score">{{ match.getResultat() }}</span>
+                                            <div class="team">
+                                                <span class="team-name">{{ equipes[1].getNom() }}</span>
+                                                <img src="{{ asset('image/logos/' ~ equipes[1].getLogo()) }}" alt="{{ equipes[1].getNom() }}" class="team-logo">
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
-        .filter-btn:hover {
-            border-color: rgba(197, 19, 158, 0.8);
-            color: rgba(197, 19, 158, 1);
-        }
+            </div>
+        {% endfor %}
+    </div>
+</section>
 
-        .filter-btn.active {
-            background: rgba(197, 19, 158, 0.6);
-            color: white;
-            border-color: rgba(197, 19, 158, 1);
-            box-shadow: 0 0 20px rgba(197, 19, 158, 0.4);
-        }
-
-        .jeu-section {
-            margin-bottom: 80px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            display: none;
-        }
-
-        .jeu-section.active {
-            display: block;
-        }
-
-        .jeu-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid rgba(197, 19, 158, 0.3);
-        }
-
-        .jeu-title {
-            font-size: 2.2rem;
-            color: rgba(197, 19, 158, 0.6);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 0;
-            font-weight: 700;
-        }
-
-        .upcoming-title,
-        .past-title {
-            font-size: 1.2rem;
-            color: rgba(197, 19, 158, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .matches-upcoming {
-            margin-bottom: 50px;
-        }
-
-        .matches-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-        }
-
-        .match-card {
-            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-            border: 2px solid rgba(197, 19, 158, 0.3);
-            border-radius: 12px;
-            padding: 25px;
-            transition: all 0.3s ease;
-        }
-
-        .match-card:hover {
-            border-color: rgba(197, 19, 158, 0.8);
-            box-shadow: 0 8px 30px rgba(197, 19, 158, 0.2);
-        }
-
-        .match-card.upcoming {
-            border-color: rgba(197, 19, 158, 0.4);
-        }
-
-        .match-card.past {
-            opacity: 0.8;
-        }
-
-        .match-date {
-            text-align: center;
-            font-size: 1rem;
-            color: rgba(197, 19, 158, 1);
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .match-time {
-            display: block;
-            font-size: 0.9rem;
-            color: #aaa;
-            margin-top: 5px;
-        }
-
-        .match-teams {
-            margin-bottom: 20px;
-        }
-
-        .team-vs {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .team-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-        }
-
-        .team-logo-small {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-        }
-
-        .team-name {
-            color: white;
-            font-weight: bold;
-            font-size: 0.95rem;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .vs-text {
-            color: rgba(197, 19, 158, 0.6);
-            font-weight: bold;
-            font-size: 1.2rem;
-            min-width: 50px;
-            text-align: center;
-        }
-
-        .btn-vote-link,
-        .btn-see-link {
-            display: block;
-            text-align: center;
-            padding: 12px;
-            background: rgba(197, 19, 158, 0.2);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            border: 2px solid rgba(197, 19, 158, 0.5);
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-vote-link:hover,
-        .btn-see-link:hover {
-            background: rgba(197, 19, 158, 0.6);
-            border-color: rgba(197, 19, 158, 1);
-            box-shadow: 0 0 15px rgba(197, 19, 158, 0.3);
-        }
-
-        .no-matches {
-            text-align: center;
-            color: #888;
-            font-size: 1.3rem;
-            padding: 60px 20px;
-        }
-
-        @media (max-width: 768px) {
-            .navbar-spacer {
-                height: 80px;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .jeu-title {
-                font-size: 1.5rem;
-            }
-
-            .matches-list {
-                grid-template-columns: 1fr;
-            }
-
-            .team-vs {
-                flex-wrap: wrap;
-            }
-
-            .jeu-filter {
-                gap: 10px;
-            }
-
-            .filter-btn {
-                padding: 10px 15px;
-                font-size: 0.85rem;
-            }
-        }
-    </style>
-
-    <script>
-        // Au chargement, afficher tous les jeux
-        document.addEventListener('DOMContentLoaded', function() {
-            filterJeu('all');
-        });
-
-        function filterJeu(jeu) {
-            // Mettre à jour les boutons
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-
-            // Afficher/masquer les sections
-            const sections = document.querySelectorAll('.jeu-section');
-            if (jeu === 'all') {
-                sections.forEach(section => section.classList.add('active'));
-            } else {
-                sections.forEach(section => {
-                    if (section.dataset.jeu === jeu) {
-                        section.classList.add('active');
-                    } else {
-                        section.classList.remove('active');
-                    }
-                });
-            }
-        }
-    </script>
+<link rel="stylesheet" href="{{ asset('css/rencontre.css') }}">
+<script src="{{ asset('js/rencontre.js') }}"></script>
 {% endblock %}
 

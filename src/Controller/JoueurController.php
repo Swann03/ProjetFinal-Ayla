@@ -14,7 +14,7 @@ final class JoueurController extends AbstractController
     #[Route('/joueur', name: 'app_joueur')]
     public function index(EquipeRepository $equipeRepository): Response
     {
-        $equipes = $equipeRepository->findAll();
+        $equipes = $equipeRepository->findBy(['isAdversaire' => false]);
         return $this->render('joueur/index.html.twig', [
             'equipes' => $equipes
         ]);
@@ -112,37 +112,6 @@ public function joueursParEquipe($id, EquipeRepository $equipeRepository): Respo
     return $this->render('joueur/equipe.html.twig', [
         'equipe' => $equipe
     ]);
-}
-    #[Route('/joueur/init-matchs-valorant', name: 'app_init_matchs_valorant')]
-public function initMatchsValorant(EquipeRepository $equipeRepository, EntityManagerInterface $em): Response
-{
-    $equipe = $equipeRepository->findOneBy(['nom' => 'VALORANT']);
-
-    if (!$equipe) {
-        return new Response('❌ Équipe Valorant introuvable dans la base.');
-    }
-
-    $matchs = [
-        ['date' => '2025-08-14', 'adversaire' => 'Team Vitality', 'score' => '1 : 2', 'resultat' => 'Défaite'],
-        ['date' => '2025-08-07', 'adversaire' => 'GIANTX', 'score' => '1 : 2', 'resultat' => 'Défaite'],
-        ['date' => '2025-07-30', 'adversaire' => 'BBL', 'score' => '0 : 2', 'resultat' => 'Défaite'],
-        ['date' => '2025-07-24', 'adversaire' => 'Team Heretics', 'score' => '1 : 2', 'resultat' => 'Défaite'],
-        ['date' => '2025-07-18', 'adversaire' => 'FUT Esports', 'score' => '1 : 2', 'resultat' => 'Défaite'],
-    ];
-
-    foreach ($matchs as $m) {
-        $rencontre = new \App\Entity\Rencontre();
-        $rencontre->setDate(new \DateTime($m['date']));
-        $rencontre->setJeu('VALORANT');
-        $rencontre->setResultat($m['resultat'] . ' (' . $m['score'] . ')');
-        $rencontre->addEquipe($equipe);
-        $em->persist($rencontre);
-    }
-
-    $em->flush();
-
-    return new Response('<h2 style="color: green;">✅ Matchs Valorant ajoutés avec succès !</h2>
-        <a href="/joueur/equipe/' . $equipe->getId() . '" style="color: white; background: purple; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Voir l’équipe Valorant</a>');
 }
 
 
