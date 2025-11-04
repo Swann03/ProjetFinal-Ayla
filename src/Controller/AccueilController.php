@@ -32,7 +32,7 @@ class AccueilController extends AbstractController
             'titre' => 'GENTLEMATES OFFICIAL ESPORTS TEAM',
             'sousTitre' => 'ALWAYS GENTLE, ALWAYS STRONG',
             'ctaLabel' => 'JOIN THE COMMUNITY',
-            'ctaLien' => '#',  // Lien vers ton Discord ou ta page communauté
+            'ctaLien' => '#',  // Lien vers le lien Discord ou ta page communauté
             'imageFond' => 'hero-gentlemates.jpg', // Place cette image dans public/images
         ];
 

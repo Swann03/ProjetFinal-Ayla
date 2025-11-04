@@ -29,6 +29,9 @@ class Equipe
 
     #[ORM\Column(name: 'is_adversaire', type: 'boolean', options: ['default' => false])]
     private ?bool $isAdversaire = false;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private ?bool $isClubPrincipal = false;
     /**
      * @var Collection<int, Joueur>
      */
@@ -211,14 +214,26 @@ class Equipe
         return $this;
     }
 
-    public function getIsAdversaire(): ?bool
-    {
-        return $this->isAdversaire;
+    public function getIsAdversaire(): ?bool 
+    { 
+        return $this->isAdversaire; 
     }
 
     public function setIsAdversaire(bool $isAdversaire): static
     {
         $this->isAdversaire = $isAdversaire;
+
+        return $this;
+    }
+
+    public function getIsClubPrincipal(): ?bool
+    {
+        return $this->isClubPrincipal;
+    }
+
+    public function setIsClubPrincipal(bool $isClubPrincipal): static
+    {
+        $this->isClubPrincipal = $isClubPrincipal;
 
         return $this;
     }

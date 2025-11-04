@@ -19,6 +19,10 @@
                 background-color: #0a0a0a;
                 color: white;
             }
+            html {
+                scroll-behavior: smooth;
+            }
+
             
             /* --- NAVBAR --- */
             .navbar-custom {
@@ -389,6 +393,7 @@
                 .footer-title {
                     font-size: 1.5rem;
                 }
+                
             }
             
 
@@ -407,33 +412,39 @@
     </head>
     <body>
         <!-- NAVBAR -->
-        <nav class="navbar-custom">
-            <a href="{{ path('app_accueil') }}" class="navbar-logo">Gentlemates</a>
-            
-            <ul class="navbar-menu" id="navMenu">
-                <li><a href="{{ path('app_equipe') }}">Équipes</a></li>
-                <li><a href="{{ path('app_joueur') }}">Joueurs</a></li>
-                <li><a href="{{ path('app_rencontre') }}">Matchs</a></li>
-                <li><a href="{{ path('app_media') }}">Actualités</a></li>
-                <li><a href="{{ path('app_vote') }}">Votes</a></li>
-            </ul>
-            
-            <div class="navbar-auth">
-                {% if app.user %}
-                    <span class="navbar-username">{{ app.user.email }}</span>
-                    <a href="{{ path('app_logout') }}" class="navbar-logout">Déconnexion</a>
-                {% else %}
-                    <a href="{{ path('app_login') }}" class="navbar-login">Se connecter</a>
-                    <a href="{{ path('app_register') }}" class="navbar-register">S'inscrire</a>
-                {% endif %}
-            </div>
-            
-            <div class="navbar-burger" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
+<nav class="navbar-custom">
+    <a href="{{ path('app_accueil') }}" class="navbar-logo">Gentlemates</a>
+
+    <ul class="navbar-menu" id="navMenu">
+        <li><a href="{{ path('app_joueur') }}">Équipe</a></li>
+        <li><a href="{{ path('app_rencontre') }}">Matchs</a></li>
+
+        {% if app.request.attributes.get('_route') == 'app_accueil' %}
+            <li><a href="#news">Actualités</a></li>
+        {% else %}
+            <li><a href="{{ path('app_accueil') }}#news">Actualités</a></li>
+        {% endif %}
+
+        <li><a href="{{ path('app_vote') }}">Votes</a></li>
+    </ul>
+
+    <div class="navbar-auth">
+        {% if app.user %}
+            <span class="navbar-username">{{ app.user.email }}</span>
+            <a href="{{ path('app_logout') }}" class="navbar-logout">Déconnexion</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="navbar-login">Se connecter</a>
+            <a href="{{ path('app_register') }}" class="navbar-register">S'inscrire</a>
+        {% endif %}
+    </div>
+
+    <div class="navbar-burger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</nav>
+
 
        
         {% block body %}{% endblock %}
