@@ -27,7 +27,7 @@ class AccueilController extends AbstractController
         $votes = $voteRepo->findBy([], ['id' => 'DESC'], 1); // Dernier vote actif
         $medias = $mediaRepo->findBy([], [], 4);
 
-        // Données pour le Hero
+        // Données pour le m8banner
         $banniere = [
             'titre' => 'GENTLEMATES OFFICIAL ESPORTS TEAM',
             'sousTitre' => 'ALWAYS GENTLE, ALWAYS STRONG',
