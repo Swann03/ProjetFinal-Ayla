@@ -39,6 +39,16 @@ public function publique(RencontreRepository $rencontreRepository): Response
         } else {
             $rencontresParJeu[$jeu]['termines'][] = $rencontre;
         }
+
+        
+    }
+
+    // 🔹 Tri des matchs dans chaque section
+    foreach ($rencontresParJeu as &$data) {
+        // Matchs à venir → du plus proche au plus lointain
+        usort($data['avenir'], fn($a, $b) => $a->getDate() <=> $b->getDate());
+        // Matchs terminés → du plus récent au plus ancien
+        usort($data['termines'], fn($a, $b) => $b->getDate() <=> $a->getDate());
     }
 
     return $this->render('rencontre/publique.html.twig', [

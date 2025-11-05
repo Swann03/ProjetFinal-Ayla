@@ -33,15 +33,13 @@
                             {% if equipes|length >= 2 %}
                                 <div class="match-row upcoming">
                                     <div class="match-date">
-                                       {{ match.getDate()|date('d') }} 
+                                        {{ match.getDate()|date('d') }} 
                                         {{ ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'][match.getDate()|date('n')-1] }} 
                                         {{ match.getDate()|date('Y') }}
-
                                     </div>
                                     <div class="match-teams">
                                         <div class="team">
                                             <img src="{{ asset('image/logos/' ~ equipes[0].getLogo()) }}" alt="{{ equipes[0].getNom() }}" class="team-logo">
-                                            
                                             <span class="team-name">{{ equipes[0].getNom() }}</span>
                                         </div>
                                         <span class="vs">VS</span>
@@ -57,42 +55,54 @@
                 {% endif %}
 
                 {# MATCHS TERMINÉS #}
-                    {% if data.termines is defined and data.termines|length > 0 %}
-                        <h3 class="past-title">RÉSULTATS</h3>
-                        <div class="match-list">
-                            {% for match in data.termines %}
-                                {% set equipes = match.getEquipes() %}
-                                {% if equipes|length >= 2 %}
-                                    <div class="match-row past">
-                                        <div class="match-date">
-                                            {{ match.getDate()|date('d') }} 
-                                            {{ ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'][match.getDate()|date('n')-1] }} 
-                                            {{ match.getDate()|date('Y') }}
-                                        </div>
+                {% if data.termines is defined and data.termines|length > 0 %}
+                    <h3 class="past-title">RÉSULTATS</h3>
+                    <div class="match-list">
+                        {% for match in data.termines %}
+                            {% set equipes = match.getEquipes() %}
+                            {% if equipes|length >= 2 %}
+                                <div class="match-row past">
+                                    <div class="match-date">
+                                        {{ match.getDate()|date('d') }} 
+                                        {{ ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'][match.getDate()|date('n')-1] }} 
+                                        {{ match.getDate()|date('Y') }}
+                                    </div>
 
-                                        <div class="match-teams">
-                                            <div class="team">
-                                                <img src="{{ asset('image/logos/' ~ equipes[0].getLogo()) }}" alt="{{ equipes[0].getNom() }}" class="team-logo">
-                                                <span class="team-name">{{ equipes[0].getNom() }}</span>
-                                            </div>
-                                            <span class="score">{{ match.getResultat() }}</span>
-                                            <div class="team">
-                                                <span class="team-name">{{ equipes[1].getNom() }}</span>
-                                                <img src="{{ asset('image/logos/' ~ equipes[1].getLogo()) }}" alt="{{ equipes[1].getNom() }}" class="team-logo">
-                                            </div>
+                                    <div class="match-teams">
+                                        <div class="team">
+                                            <img src="{{ asset('image/logos/' ~ equipes[0].getLogo()) }}" alt="{{ equipes[0].getNom() }}" class="team-logo">
+                                            <span class="team-name">{{ equipes[0].getNom() }}</span>
+                                        </div>
+                                        <span class="score">{{ match.getResultat() }}</span>
+                                        <div class="team">
+                                            <span class="team-name">{{ equipes[1].getNom() }}</span>
+                                            <img src="{{ asset('image/logos/' ~ equipes[1].getLogo()) }}" alt="{{ equipes[1].getNom() }}" class="team-logo">
                                         </div>
                                     </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
         {% endfor %}
     </div>
 </section>
 
 <link rel="stylesheet" href="{{ asset('css/rencontre.css') }}">
-<script src="{{ asset('js/rencontre.js') }}"></script>
-{% endblock %}
+<script>
+function filterJeu(jeu, event) {
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    const sections = document.querySelectorAll('.jeu-section');
+    if (jeu === 'all') {
+        sections.forEach(s => s.style.display = 'block');
+    } else {
+        sections.forEach(s => {
+            s.style.display = (s.dataset.jeu === jeu) ? 'block' : 'none';
+        });
+    }
+}
 
+</script>
+{% endblock %}

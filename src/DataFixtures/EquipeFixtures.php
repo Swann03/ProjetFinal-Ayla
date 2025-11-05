@@ -23,7 +23,7 @@ class EquipeFixtures extends Fixture
         // 2️⃣ ÉQUIPES DE JEUX DU CLUB
         $jeux = [
             ['VALORANT', 'valorant.png', 'valorant.jpg'],
-            ['COUNTER STRIKE', 'cs.png', 'cs.jpg'],
+            ['COUNTER STRIKE 2', 'cs.png', 'cs.jpg'],
             ['FORTNITE', 'fortnite.png', 'fortnite.jpg'],
             ['TEAMFIGHT TACTICS', 'tft.png', 'tft.jpg'],
             ['AGE OF EMPIRES', 'aoe.png', 'aoe.jpg'],

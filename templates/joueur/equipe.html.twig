@@ -20,17 +20,53 @@
             <h2>NOS JOUEURS</h2>
             
             <div class="team-photo-container">
-                <img src="{{ asset('image/equipes/valorant.jpg') }}" 
+                <img src="{{ asset('image/equipes/' ~ equipe.imageFond) }}" 
                      alt="Équipe {{ equipe.nom }}" 
                      class="team-photo">
                 
-                {% set positions = {
-    1: {x: 35, y: 30},
-    2: {x: 50, y: 55},
-    3: {x: 20, y: 50},
-    4: {x: 75, y: 45},
-    5: {x: 62, y: 30}
-} %}
+             {# Position des cercles selon le jeu #}
+        {% if equipe.nom == 'VALORANT' %}
+            {% set positions = {
+                1: {x: 35, y: 30},
+                2: {x: 50, y: 55},
+                3: {x: 20, y: 50},
+                4: {x: 75, y: 45},
+                5: {x: 62, y: 30}
+            } %}
+        {% elseif equipe.nom == 'COUNTER STRIKE 2' %}
+            {% set positions = {
+                1: {x: 20, y: 50},
+                2: {x: 35, y: 32},
+                3: {x: 50, y: 50},
+                4: {x: 80, y: 50},
+                5: {x: 65, y: 32}
+            } %}
+        {% elseif equipe.nom == 'FORTNITE' %}
+            {% set positions = {
+                1: {x: 30, y: 35},
+                2: {x: 50, y: 25},
+                3: {x: 70, y: 35},
+                4: {x: 40, y: 55},
+                5: {x: 60, y: 50}
+            } %}
+        {% elseif equipe.nom == 'ROCKET LEAGUE' %}
+            {% set positions = {
+                1: {x: 30, y: 30},
+                2: {x: 50, y: 30},
+                3: {x: 70, y: 30},
+                4: {x: 40, y: 55},
+                5: {x: 60, y: 55}
+            } %}
+        {% else %}
+            {% set positions = {
+                1: {x: 35, y: 30},
+                2: {x: 50, y: 55},
+                3: {x: 20, y: 50},
+                4: {x: 75, y: 45},
+                5: {x: 62, y: 30}
+            } %}
+        {% endif %}
+
 
 
 
@@ -40,7 +76,7 @@
     <div class="player-hotspot-invisible" 
          style="left: {{ positions[loop.index].x }}%; top: {{ positions[loop.index].y }}%;"
          onclick="openModal({{ joueur.id }})">
-        <span class="hotspot-label">{{ joueur.nom }}</span>
+        <span class="hotspot-label">{{ joueur.pseudo }}</span>
     </div>
     
    <div id="modal-{{ joueur.id }}" class="modal">
@@ -49,7 +85,7 @@
         
         <div class="modal-body">
             <div class="modal-info">
-                <h2>{{ joueur.nom }}</h2>
+                <h2>{{ joueur.pseudo }}</h2>
                 <p class="player-bio">{{ joueur.bio }}</p>
             </div>
         </div>
@@ -61,11 +97,11 @@
             </div>
             
             <div class="back-link">
-                <a href="{{ path('app_equipe') }}" class="btn-back">
+                <a href="{{ path('app_joueur') }}" class="btn-back">
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                     </svg>
-                    Retour aux équipes
+                    Retour aux equipes
                 </a>
             </div>
         </div>

@@ -75,8 +75,53 @@ class RencontreFixtures extends Fixture
             $manager->persist($rencontre);
         }
 
+        $adversairesCs2 = [
+            'GamerLegion'     => 'gamelegion.png',
+            'BetBoom'         => 'betboom.png',
+            'Ninja in Pyjamas' => 'nip.png',
+            'Legacy'          => 'legacy.png',
+            'pain'            => 'pain.png',
+        ];
+
+        $equipesAdversesCs2 = [];
+        foreach ($adversairesCs2 as $nom => $logo) {
+            $equipe = $manager->getRepository(Equipe::class)->findOneBy(['nom' => $nom]);
+            if (!$equipe) {
+                $equipe = new Equipe();
+                $equipe->setNom($nom);
+                $equipe->setLogo($logo);
+                $equipe->setDescription("Équipe adverse : $nom");
+                $equipe->setIsAdversaire(true);
+                $equipe->setIsClubPrincipal(false);
+                $manager->persist($equipe);
+            }
+            $equipesAdversesCs2[$nom] = $equipe;
+        }
+
+        $matchsCS2 = [
+            ['date' => '2025-10-30', 'adversaire' => 'GamerLegion',      'resultat' => '0 : 2'],
+            ['date' => '2025-10-29', 'adversaire' => 'BetBoom',        'resultat' => '2 : 1'],
+            ['date' => '2025-10-28', 'adversaire' => 'Ninja in Pyjamas',           'resultat' => '2 : 1'],
+            ['date' => '2025-10-27', 'adversaire' => 'Legacy', 'resultat' => '0 : 2'],
+            ['date' => '2025-10-26', 'adversaire' => 'pain',           'resultat' => '0 : 2']
+        ];
+
+        foreach ($matchsCS2 as $data) {
+            $rencontre = new Rencontre();
+            $rencontre->setDate(new DateTime($data['date']));
+            $rencontre->setJeu('CS2');
+            $rencontre->setResultat($data['resultat']);
+
+            // ✅ On associe Gentlemates (club principal) et l’adversaire
+            $rencontre->addEquipe($gentlemates);
+            $rencontre->addEquipe($equipesAdversesCs2[$data['adversaire']]);
+
+            $manager->persist($rencontre);
+        }
+
         $manager->flush();
     }
+
 }
 
 

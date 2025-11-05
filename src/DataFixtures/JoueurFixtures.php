@@ -57,6 +57,43 @@ class JoueurFixtures extends Fixture
             $manager->persist($joueur);
         }
 
+        $cs2 = $manager->getRepository(Equipe::class)->findOneBy(['nom' => 'counter strike 2']);
+        if(!$cs2) {
+            throw new \Exception('⚠️ L’équipe Counter Strike 2 doit exister avant d’ajouter les joueurs. Lance d’abord EquipeFixtures.');
+        }
+
+        $joueurs = [
+            [   'nom' => 'David Granado Bermudo',
+                'pseudo' => 'dav1g',
+                'bio' => 'David "dav1g" Granado Bermudo est un sniper espagnol, connu pour son style agressif et ses réflexes surhumains.'
+            ],
+            [   'nom' => 'Antonio Martinez Sanchez',
+                'pseudo' => 'Martinez',
+                'bio' => 'Antonio "Martinez" Martinez Sanchez, est un rifler jeune et explosif, au potentiel immense sur la scène counter strike.'
+            ],
+            [   'nom' => 'Pere Solsona Saumell',
+                'pseudo' => 'sausoL',
+                'bio' => 'Pere "sausoL" Solsona Saumell, très bon support.'
+            ],
+            [   'nom' => 'Alejandro Fernandez-Quejo Cano',
+                'pseudo' => 'Mopoz',
+                'bio' => 'Alejandro "Mopoz" Fernandez-Quejo Cano est un joueur polyvalent espagnol, capable de s’adapter à toutes les situations.'
+            ],
+            [   'nom' => 'Alejandro Masanet Candela',
+                'pseudo' => 'Alex',
+                'bio' => 'Alejandro "Alex" Masanet Candela, joueur d’expérience, est un pilier de l’équipe et un meneur calme.'
+            ],
+        ];
+
+        foreach ($joueurs as $data) {
+            $joueur = new Joueur();
+            $joueur->setNom($data['nom']);
+            $joueur->setPseudo($data['pseudo']);
+            $joueur->setBio($data['bio']);
+            $joueur->setEquipe($cs2);
+            $manager->persist($joueur);
+        }
+
         $manager->flush();
     }
 }
