@@ -17,7 +17,7 @@ class EquipeFixtures extends Fixture
         $gentlemates->setImageFond('gentlemates-banner.jpg');
         $gentlemates->setDescription('Club eSport officiel créé par Squeezie, Gotaga et Brawks.');
         $gentlemates->setIsAdversaire(true);
-        $gentlemates->setIsClubPrincipal(true); // ✅ Nouveau champ
+        $gentlemates->setIsClubPrincipal(true); 
         $manager->persist($gentlemates);
 
         // 2️⃣ ÉQUIPES DE JEUX DU CLUB
@@ -25,8 +25,6 @@ class EquipeFixtures extends Fixture
             ['VALORANT', 'valorant.png', 'valorant.jpg'],
             ['COUNTER STRIKE 2', 'cs.png', 'cs.jpg'],
             ['FORTNITE', 'fortnite.png', 'fortnite.jpg'],
-            ['TEAMFIGHT TACTICS', 'tft.png', 'tft.jpg'],
-            ['AGE OF EMPIRES', 'aoe.png', 'aoe.jpg'],
             ['ROCKET LEAGUE', 'rocket.png', 'rocket-league.jpg'],
             ['CALL OF DUTY', 'cod.png', 'cod.jpg'],
             ['CALL OF DUTY WARZONE', 'cod-warzone.png', 'cod-warzone.jpg'],
@@ -43,7 +41,7 @@ class EquipeFixtures extends Fixture
             $manager->persist($equipe);
         }           
 
-        // 3️⃣ ÉQUIPES ADVERSAIRES
+        // EQUIPES ADVERSAIRES
         $adversaires = [
             ['Vitality', 'vitality.png'],
             ['GiantX', 'giantx.png'],

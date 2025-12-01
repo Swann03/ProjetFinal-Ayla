@@ -2,130 +2,123 @@
 {% block title %}{{ equipe.nom }} - Gentlemates{% endblock %}
 
 {% block stylesheets %}
-{{ parent() }}
-<link rel="stylesheet" href="{{ asset('css/equipe.css') }}">
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/equipe.css') }}">
 {% endblock %}
 
 {% block body %}
-    <section class="team-detail-hero">
-        <div class="overlay"></div>
-        <div class="hero-content">
-            <h1>{{ equipe.nom }}</h1>
-            <p>ROSTER</p>
-        </div>
-    </section>
+
+    {# espace pour la navbar si elle est en fixed #}
+    <div class="navbar-spacer"></div>
 
     <section class="roster-section">
         <div class="container">
-            <h2>NOS JOUEURS</h2>
             
             <div class="team-photo-container">
                 <img src="{{ asset('image/equipes/' ~ equipe.imageFond) }}" 
                      alt="Équipe {{ equipe.nom }}" 
                      class="team-photo">
-                
-             {# Position des cercles selon le jeu #}
-        {% if equipe.nom == 'VALORANT' %}
-            {% set positions = {
-                1: {x: 35, y: 30},
-                2: {x: 50, y: 55},
-                3: {x: 20, y: 50},
-                4: {x: 75, y: 45},
-                5: {x: 62, y: 30}
-            } %}
-        {% elseif equipe.nom == 'COUNTER STRIKE 2' %}
-            {% set positions = {
-                1: {x: 20, y: 50},
-                2: {x: 35, y: 32},
-                3: {x: 50, y: 50},
-                4: {x: 80, y: 50},
-                5: {x: 65, y: 32}
-            } %}
-        {% elseif equipe.nom == 'FORTNITE' %}
-            {% set positions = {
-                1: {x: 30, y: 35},
-                2: {x: 50, y: 25},
-                3: {x: 70, y: 35},
-                4: {x: 40, y: 55},
-                5: {x: 60, y: 50}
-            } %}
-        {% elseif equipe.nom == 'ROCKET LEAGUE' %}
-            {% set positions = {
-                1: {x: 30, y: 30},
-                2: {x: 50, y: 30},
-                3: {x: 70, y: 30},
-                4: {x: 40, y: 55},
-                5: {x: 60, y: 55}
-            } %}
-        {% else %}
-            {% set positions = {
-                1: {x: 35, y: 30},
-                2: {x: 50, y: 55},
-                3: {x: 20, y: 50},
-                4: {x: 75, y: 45},
-                5: {x: 62, y: 30}
-            } %}
-        {% endif %}
 
+                {# Position des cercles selon le jeu #}
+                {% if equipe.nom == 'VALORANT' %}
+                    {% set positions = {
+                        1: {x: 35, y: 30},
+                        2: {x: 50, y: 55},
+                        3: {x: 20, y: 50},
+                        4: {x: 75, y: 45},
+                        5: {x: 62, y: 30}
+                    } %}
+                {% elseif equipe.nom == 'COUNTER STRIKE 2' %}
+                    {% set positions = {
+                        1: {x: 20, y: 50},
+                        2: {x: 35, y: 32},
+                        3: {x: 50, y: 50},
+                        4: {x: 80, y: 50},
+                        5: {x: 65, y: 32}
+                    } %}
+                {% elseif equipe.nom == 'CALL OF DUTY' %}
+                    {% set positions = {
+                        1: {x: 85, y: 60},
+                        2: {x: 15, y: 60},
+                        3: {x: 63, y: 60},
+                        4: {x: 34, y: 60},
+                    } %}
+                {% elseif equipe.nom == 'FORTNITE' %}
+                    {% set positions = {
+                        1: {x: 70, y: 60},
+                        2: {x: 85, y: 60},
+                        3: {x: 50, y: 60},
+                        4: {x: 33, y: 60},
+                        5: {x: 18, y: 60},
+                    } %}
+                {% elseif equipe.nom == 'ROCKET LEAGUE' %}
+                    {% set positions = {
+                        1: {x: 50, y: 50},
+                        2: {x: 25, y: 40},
+                        3: {x: 75, y: 40},
+                    } %}
+                {% else %}
+                    {% set positions = {
+                        1: {x: 46, y: 63},
+                        2: {x: 15, y: 60},
+                        3: {x: 75, y: 60}
+                    } %}
+                {% endif %}
 
+                {# HOTSPOTS DES JOUEURS #}
+                {% for joueur in equipe.joueurs %}
+                    <div class="player-hotspot-invisible" 
+                         style="left: {{ positions[loop.index].x }}%; top: {{ positions[loop.index].y }}%;"
+                         onclick="openModal({{ joueur.id }})">
+                        <span class="hotspot-label">{{ joueur.pseudo }}</span>
+                    </div>
 
-
-
-
-{% for joueur in equipe.joueurs %}
-    <div class="player-hotspot-invisible" 
-         style="left: {{ positions[loop.index].x }}%; top: {{ positions[loop.index].y }}%;"
-         onclick="openModal({{ joueur.id }})">
-        <span class="hotspot-label">{{ joueur.pseudo }}</span>
-    </div>
-    
-   <div id="modal-{{ joueur.id }}" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal({{ joueur.id }})">×</span>
-        
-        <div class="modal-body">
-            <div class="modal-info">
-                <h2>{{ joueur.pseudo }}</h2>
-                <p class="player-bio">{{ joueur.bio }}</p>
+                    <div id="modal-{{ joueur.id }}" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal({{ joueur.id }})">×</span>
+                            <div class="modal-body">
+                                <div class="modal-info">
+                                    <h2>{{ joueur.pseudo }}</h2>
+                                    <p class="player-bio">{{ joueur.bio }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-        </div>
-    </div>
-</div>
 
-{% endfor %}
-
-            </div>
-            
-            <div class="back-link">
+           <div class="back-link" style="margin-top: 10px;">
                 <a href="{{ path('app_joueur') }}" class="btn-back">
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                     </svg>
-                    Retour aux equipes
+                    Retour aux équipes
                 </a>
             </div>
+
         </div>
     </section>
 {% endblock %}
 
 {% block javascripts %}
-{{ parent() }}
-<script>
-function openModal(joueurId) {
-    document.getElementById('modal-' + joueurId).style.display = 'block';
-    document.body.style.overflow = 'hidden';
-}
+    {{ parent() }}
+    <script>
+        function openModal(joueurId) {
+            document.getElementById('modal-' + joueurId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
 
-function closeModal(joueurId) {
-    document.getElementById('modal-' + joueurId).style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
+        function closeModal(joueurId) {
+            document.getElementById('modal-' + joueurId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
 
-window.onclick = function(event) {
-    if (event.target.className === 'modal') {
-        event.target.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-}
-</script>
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
 {% endblock %}
+

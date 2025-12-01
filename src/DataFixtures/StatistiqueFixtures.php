@@ -11,23 +11,23 @@ use App\Entity\Rencontre;
 
 class StatistiqueFixtures extends Fixture
 {
-    public function load(ObjectManager $manager): void
-    {
-        $faker = Factory::create('fr_FR');
+ public function load(ObjectManager $manager): void
+{
+    $faker = Factory::create('fr_FR');
 
-        $rencontres = $manager->getRepository(Rencontre::class)->findAll();
+    $rencontres = $manager->getRepository(Rencontre::class)->findAll();
 
-        for ($i = 0; $i < 5; $i++) { 
-            $stat = new Statistique();
+    foreach ($rencontres as $rencontre) { 
+        $stat = new Statistique();
 
-            $stat->setKillCount($faker->numberBetween(0, 5));   
-            $stat->setDeadCount($faker->numberBetween(0, 5));   
-            $stat->setAssistCount($faker->numberBetween(0, 5)); 
-            $stat->setRencontre($rencontres[$i]);
+        $stat->setKillCount($faker->numberBetween(0, 5));   
+        $stat->setDeadCount($faker->numberBetween(0, 5));   
+        $stat->setAssistCount($faker->numberBetween(0, 5)); 
+        $stat->setRencontre($rencontre);
 
-            $manager->persist($stat);
-        }
-
-        $manager->flush();
+        $manager->persist($stat);
     }
+
+    $manager->flush();
+}
 }

@@ -56,7 +56,6 @@
 
                 {# MATCHS TERMINÉS #}
                 {% if data.termines is defined and data.termines|length > 0 %}
-                    <h3 class="past-title">RÉSULTATS</h3>
                     <div class="match-list">
                         {% for match in data.termines %}
                             {% set equipes = match.getEquipes() %}
