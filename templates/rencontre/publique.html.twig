@@ -31,24 +31,31 @@
                         {% for match in data.avenir %}
                             {% set equipes = match.getEquipes() %}
                             {% if equipes|length >= 2 %}
+                                {% set equipeA = equipes[0] %}
+                                {% set equipeB = equipes[1] %}
+
                                 <div class="match-row upcoming">
                                     <div class="match-date">
                                         {{ match.getDate()|date('d') }} 
                                         {{ ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'][match.getDate()|date('n')-1] }} 
                                         {{ match.getDate()|date('Y') }}
                                     </div>
+
                                     <div class="match-teams">
                                         <div class="team">
-                                            <img src="{{ asset('image/logos/' ~ equipes[0].getLogo()) }}" alt="{{ equipes[0].getNom() }}" class="team-logo">
-                                            <span class="team-name">{{ equipes[0].getNom() }}</span>
+                                            <img src="{{ asset('image/logos/' ~ equipeA.getLogoAffichage()) }}" 
+                                                 alt="{{ equipeA.getNomAffichage() }}" class="team-logo">
+                                            <span class="team-name">{{ equipeA.getNomAffichage() }}</span>
                                         </div>
                                         <span class="vs">VS</span>
                                         <div class="team">
-                                            <span class="team-name">{{ equipes[1].getNom() }}</span>
-                                            <img src="{{ asset('image/logos/' ~ equipes[1].getLogo()) }}" alt="{{ equipes[1].getNom() }}" class="team-logo">
+                                            <span class="team-name">{{ equipeB.getNomAffichage() }}</span>
+                                            <img src="{{ asset('image/logos/' ~ equipeB.getLogoAffichage()) }}" 
+                                                 alt="{{ equipeB.getNomAffichage() }}" class="team-logo">
                                         </div>
                                     </div>
                                 </div>
+
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -60,6 +67,9 @@
                         {% for match in data.termines %}
                             {% set equipes = match.getEquipes() %}
                             {% if equipes|length >= 2 %}
+                                {% set equipeA = equipes[0] %}
+                                {% set equipeB = equipes[1] %}
+
                                 <div class="match-row past">
                                     <div class="match-date">
                                         {{ match.getDate()|date('d') }} 
@@ -69,16 +79,19 @@
 
                                     <div class="match-teams">
                                         <div class="team">
-                                            <img src="{{ asset('image/logos/' ~ equipes[0].getLogo()) }}" alt="{{ equipes[0].getNom() }}" class="team-logo">
-                                            <span class="team-name">{{ equipes[0].getNom() }}</span>
+                                            <img src="{{ asset('image/logos/' ~ equipeA.getLogoAffichage()) }}" 
+                                                 alt="{{ equipeA.getNomAffichage() }}" class="team-logo">
+                                            <span class="team-name">{{ equipeA.getNomAffichage() }}</span>
                                         </div>
                                         <span class="score">{{ match.getResultat() }}</span>
                                         <div class="team">
-                                            <span class="team-name">{{ equipes[1].getNom() }}</span>
-                                            <img src="{{ asset('image/logos/' ~ equipes[1].getLogo()) }}" alt="{{ equipes[1].getNom() }}" class="team-logo">
+                                            <span class="team-name">{{ equipeB.getNomAffichage() }}</span>
+                                            <img src="{{ asset('image/logos/' ~ equipeB.getLogoAffichage()) }}" 
+                                                 alt="{{ equipeB.getNomAffichage() }}" class="team-logo">
                                         </div>
                                     </div>
                                 </div>
+
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -102,6 +115,5 @@ function filterJeu(jeu, event) {
         });
     }
 }
-
 </script>
 {% endblock %}

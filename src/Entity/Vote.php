@@ -4,9 +4,9 @@ namespace App\Entity;
 
 use App\Repository\VoteRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Utilisateur;
 
 #[ORM\Entity(repositoryClass: VoteRepository::class)]
+#[ORM\UniqueConstraint(name: "unique_vote", columns: ["utilisateur_id", "rencontre_id"])]
 class Vote
 {
     #[ORM\Id]
@@ -14,45 +14,34 @@ class Vote
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $point = null;
+    #[ORM\ManyToOne(inversedBy: 'votes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $utilisateur = null;
 
-    #[ORM\ManyToOne(targetEntity: Equipe::class, inversedBy: 'votes')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Equipe $equipe = null;
-
-    #[ORM\ManyToOne(targetEntity: Rencontre::class, inversedBy: 'votes')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\ManyToOne(inversedBy: 'votes')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Rencontre $rencontre = null;
 
-    #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Utilisateur $utilisateur = null;
+    #[ORM\ManyToOne(inversedBy: 'votes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Equipe $equipe = null; // équipe sur laquelle il vote
+
+    #[ORM\Column(length: 20)]
+    private ?string $choix = null; // "GENTLEMATES" ou "ADVERSAIRE"
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPoint(): ?int
+    public function getUtilisateur(): ?Utilisateur
     {
-        return $this->point;
+        return $this->utilisateur;
     }
 
-    public function setPoint(?int $point): static
+    public function setUtilisateur(?Utilisateur $utilisateur): static
     {
-        $this->point = $point;
-        return $this;
-    }
-
-    public function getEquipe(): ?Equipe
-    {
-        return $this->equipe;
-    }
-
-    public function setEquipe(?Equipe $equipe): static
-    {
-        $this->equipe = $equipe;
+        $this->utilisateur = $utilisateur;
         return $this;
     }
 
@@ -67,14 +56,26 @@ class Vote
         return $this;
     }
 
-    public function getUtilisateur(): ?Utilisateur
+    public function getEquipe(): ?Equipe
     {
-        return $this->utilisateur;
+        return $this->equipe;
     }
 
-    public function setUtilisateur(?Utilisateur $utilisateur): static
+    public function setEquipe(?Equipe $equipe): static
     {
-        $this->utilisateur = $utilisateur;
+        $this->equipe = $equipe;
+        return $this;
+    }
+
+    public function getChoix(): ?string
+    {
+        return $this->choix;
+    }
+
+    public function setChoix(string $choix): static
+    {
+        $this->choix = $choix;
         return $this;
     }
 }
+

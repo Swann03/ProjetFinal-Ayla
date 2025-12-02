@@ -12,22 +12,26 @@
             </div>
 
             <div class="match-teams">
-                {% set equipes = rencontre.getRencontre() %}
+                {# ⚠️ ici c'était getRencontre(), on récupère bien les équipes de la rencontre #}
+                {% set equipes = rencontre.getEquipes() %}
                 
                 {% if equipes|length >= 2 %}
                     {% set equipesList = equipes %}
+                    {% set equipeA = equipesList[0] %}
+                    {% set equipeB = equipesList[1] %}
+
                     <div class="team-matchup">
                         <!-- ÉQUIPE 1 -->
                         <div class="team-card team-1">
-                            <img src="{{ asset('image/' ~ equipesList[0].getLogo()) }}" alt="{{ equipesList[0].getNom() }}" class="team-logo">
-                            <h2>{{ equipesList[0].getNom() }}</h2>
+                            <img src="{{ asset('image/logos/' ~ equipeA.getLogoAffichage()) }}" alt="{{ equipeA.getNomAffichage() }}" class="team-logo">
+                            <h2>{{ equipeA.getNomAffichage() }}</h2>
                             
-                            <!-- JOUEURS - SEULEMENT POUR GENTLEMATES -->
+                            <!-- JOUEURS - SEULEMENT POUR GENTLEMATES (non adversaire) -->
                             <div class="team-players">
-                                {% if equipesList[0].getNom() == 'Gentlemates' and equipesList[0].getJoueurs()|length > 0 %}
+                                {% if not equipeA.getIsAdversaire() and equipeA.getJoueurs()|length > 0 %}
                                     <h4>Roster</h4>
                                     <div class="players-list">
-                                        {% for joueur in equipesList[0].getJoueurs() %}
+                                        {% for joueur in equipeA.getJoueurs() %}
                                             <div class="player-item">
                                                 <img src="{{ asset('image/' ~ joueur.getImageFond()) }}" alt="{{ joueur.getNom() }}" class="player-avatar">
                                                 <span class="player-name">{{ joueur.getNom() }}</span>
@@ -40,16 +44,16 @@
                             </div>
                             
                             <div class="vote-stats">
-                                <p class="vote-count">{{ voteCounts[equipesList[0].getId()]|default(0) }} votes</p>
+                                <p class="vote-count">{{ voteCounts[equipeA.getId()]|default(0) }} votes</p>
                                 {% if totalVotes > 0 %}
                                     <div class="progress-bar">
-                                        <div class="progress" style="width: {{ (voteCounts[equipesList[0].getId()]|default(0) / totalVotes * 100)|round }}%"></div>
+                                        <div class="progress" style="width: {{ (voteCounts[equipeA.getId()]|default(0) / totalVotes * 100)|round }}%"></div>
                                     </div>
                                 {% endif %}
                             </div>
 
                             <!-- ÉTOILES POUR VOTER -->
-                            <div class="star-rating" data-equipe-id="{{ equipesList[0].getId() }}">
+                            <div class="star-rating" data-equipe-id="{{ equipeA.getId() }}">
                                 <span class="star" data-value="1">⭐</span>
                                 <span class="star" data-value="2">⭐</span>
                                 <span class="star" data-value="3">⭐</span>
@@ -62,15 +66,15 @@
 
                         <!-- ÉQUIPE 2 -->
                         <div class="team-card team-2">
-                            <img src="{{ asset('image/' ~ equipesList[1].getLogo()) }}" alt="{{ equipesList[1].getNom() }}" class="team-logo">
-                            <h2>{{ equipesList[1].getNom() }}</h2>
+                            <img src="{{ asset('image/logos/' ~ equipeB.getLogoAffichage()) }}" alt="{{ equipeB.getNomAffichage() }}" class="team-logo">
+                            <h2>{{ equipeB.getNomAffichage() }}</h2>
                             
                             <!-- JOUEURS - SEULEMENT POUR GENTLEMATES -->
                             <div class="team-players">
-                                {% if equipesList[1].getNom() == 'Gentlemates' and equipesList[1].getJoueurs()|length > 0 %}
+                                {% if not equipeB.getIsAdversaire() and equipeB.getJoueurs()|length > 0 %}
                                     <h4>Roster</h4>
                                     <div class="players-list">
-                                        {% for joueur in equipesList[1].getJoueurs() %}
+                                        {% for joueur in equipeB.getJoueurs() %}
                                             <div class="player-item">
                                                 <img src="{{ asset('image/' ~ joueur.getImageFond()) }}" alt="{{ joueur.getNom() }}" class="player-avatar">
                                                 <span class="player-name">{{ joueur.getNom() }}</span>
@@ -83,16 +87,16 @@
                             </div>
                             
                             <div class="vote-stats">
-                                <p class="vote-count">{{ voteCounts[equipesList[1].getId()]|default(0) }} votes</p>
+                                <p class="vote-count">{{ voteCounts[equipeB.getId()]|default(0) }} votes</p>
                                 {% if totalVotes > 0 %}
                                     <div class="progress-bar">
-                                        <div class="progress" style="width: {{ (voteCounts[equipesList[1].getId()]|default(0) / totalVotes * 100)|round }}%"></div>
+                                        <div class="progress" style="width: {{ (voteCounts[equipeB.getId()]|default(0) / totalVotes * 100)|round }}%"></div>
                                     </div>
                                 {% endif %}
                             </div>
 
                             <!-- ÉTOILES POUR VOTER -->
-                            <div class="star-rating" data-equipe-id="{{ equipesList[1].getId() }}">
+                            <div class="star-rating" data-equipe-id="{{ equipeB.getId() }}">
                                 <span class="star" data-value="1">⭐</span>
                                 <span class="star" data-value="2">⭐</span>
                                 <span class="star" data-value="3">⭐</span>
@@ -110,6 +114,7 @@
         </div>
     </section>
 
+    {# ton CSS & JS d’origine restent identiques #}
     <style>
         .match-detail {
             background: #0a0a0a;
@@ -180,7 +185,6 @@
             margin-bottom: 30px;
         }
 
-        /* JOUEURS */
         .team-players {
             margin-bottom: 30px;
         }
@@ -259,7 +263,6 @@
             transition: width 0.5s ease;
         }
 
-        /* ÉTOILES */
         .star-rating {
             display: flex;
             justify-content: center;
@@ -373,10 +376,10 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('✅ Vote enregistré !');
+                    alert('Vote enregistré !');
                     location.reload();
                 } else {
-                    alert('❌ ' + data.message);
+                    alert('Erreur' + data.message);
                 }
             })
             .catch(error => console.error('Erreur:', error));

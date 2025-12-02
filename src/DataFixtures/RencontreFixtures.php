@@ -12,7 +12,7 @@ class RencontreFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // 1️⃣ Récupération ou création de l’équipe GENTLEMATES (club principal)
+        // Récupération ou création de l’équipe GENTLEMATES (club principal)
         $gentlemates = $manager->getRepository(Equipe::class)->findOneBy(['isClubPrincipal' => true]);
 
         if (!$gentlemates) {
@@ -26,7 +26,7 @@ class RencontreFixtures extends Fixture
             $manager->persist($gentlemates);
         }
 
-        // 2️⃣ Adversaires VALORANT
+        //Adversaires VALORANT
         $adversairesValorant = [
             'Vitality'       => 'vitality.png',
             'GiantX'         => 'giantx.png',
@@ -50,7 +50,7 @@ class RencontreFixtures extends Fixture
             $equipesAdversesValorant[$nom] = $equipe;
         }
 
-        // 3️⃣ Adversaires CS2
+        // Adversaires CS2
         $adversairesCs2 = [
             'GamerLegion'       => 'gamelegion.png',
             'BetBoom'           => 'betboom.png',
@@ -74,7 +74,7 @@ class RencontreFixtures extends Fixture
             $equipesAdversesCs2[$nom] = $equipe;
         }
 
-        // 4️⃣ Adversaires ROCKET LEAGUE
+        // Adversaires ROCKET LEAGUE
         $adversairesRL = [
             'Magnifico'      => 'magnifico.png',
             'Geekay'         => 'geekay.png',
@@ -116,14 +116,13 @@ class RencontreFixtures extends Fixture
                 $equipe->setIsClubPrincipal(false);
                 $manager->persist($equipe);
             }
-            // ✅ ICI : on remplit bien le bon tableau
             $equipesAdversesCOD[$nom] = $equipe;
         }
 
-        // 💾 On sauvegarde toutes les équipes créées avant les matchs
+        
         $manager->flush();
 
-        // 6️⃣ Matchs VALORANT
+        // Matchs VALORANT
         $matchsValorant = [
             ['date' => '2025-08-14', 'adversaire' => 'Vitality',      'resultat' => '1 : 2'],
             ['date' => '2025-08-07', 'adversaire' => 'GiantX',        'resultat' => '1 : 2'],
@@ -135,7 +134,7 @@ class RencontreFixtures extends Fixture
         foreach ($matchsValorant as $data) {
             $rencontre = new Rencontre();
             $rencontre->setDate(new DateTime($data['date']));
-            $rencontre->setJeu('valorant');
+            $rencontre->setJeu('Valorant');
             $rencontre->setResultat($data['resultat']);
 
             $rencontre->addEquipe($gentlemates);
@@ -144,7 +143,7 @@ class RencontreFixtures extends Fixture
             $manager->persist($rencontre);
         }
 
-        // 7️⃣ Matchs CS2
+        // Matchs CS2
         $matchsCS2 = [
             ['date' => '2025-10-30', 'adversaire' => 'GamerLegion',      'resultat' => '0 : 2'],
             ['date' => '2025-10-29', 'adversaire' => 'BetBoom',          'resultat' => '2 : 1'],
@@ -156,7 +155,7 @@ class RencontreFixtures extends Fixture
         foreach ($matchsCS2 as $data) {
             $rencontre = new Rencontre();
             $rencontre->setDate(new DateTime($data['date']));
-            $rencontre->setJeu('cs2');
+            $rencontre->setJeu('Counter Strike 2');
             $rencontre->setResultat($data['resultat']);
 
             $rencontre->addEquipe($gentlemates);
@@ -165,7 +164,7 @@ class RencontreFixtures extends Fixture
             $manager->persist($rencontre);
         }
 
-        // 8️⃣ Matchs ROCKET LEAGUE
+        // Matchs ROCKET LEAGUE
         $matchsRL = [
             ['date' => '2025-11-23', 'adversaire' => 'Magnifico',     'resultat' => '4 : 3'],
             ['date' => '2025-11-21', 'adversaire' => 'Geekay',        'resultat' => '3 : 1'],
@@ -177,7 +176,7 @@ class RencontreFixtures extends Fixture
         foreach ($matchsRL as $data) {
             $rencontre = new Rencontre();
             $rencontre->setDate(new DateTime($data['date']));
-            $rencontre->setJeu('Rocket League'); // ou 'rl' si ton front attend ça
+            $rencontre->setJeu('Rocket League'); 
             $rencontre->setResultat($data['resultat']);
 
             $rencontre->addEquipe($gentlemates);
@@ -186,23 +185,48 @@ class RencontreFixtures extends Fixture
             $manager->persist($rencontre);
         }
 
-        // 9️⃣ Matchs COD
+        // Matchs COD
         $matchsCOD = [
             ['date' => '2025-12-01', 'adversaire' => 'Optic Gaming',        'resultat' => '4 : 1'],
             ['date' => '2025-12-01', 'adversaire' => 'Optic Gaming',        'resultat' => '3 : 2'],
-            ['date' => '2025-11-30', 'adversaire' => 'Los Angeles Thieves', 'resultat' => '3 : 1'],
+            ['date' => '2025-11-30', 'adversaire' => 'Los Angeles Thieves',        'resultat' => '3 : 1'],
         ];
 
         foreach ($matchsCOD as $data) {
             $rencontre = new Rencontre();
             $rencontre->setDate(new DateTime($data['date']));
-            $rencontre->setJeu('Call of duty'); // pareil, adapte si ton front attend 'cod'
+            $rencontre->setJeu('Call of duty'); 
             $rencontre->setResultat($data['resultat']);
 
-            $rencontre->addEquipe($gentlemates);
+            $rencontre->addEquipe($gentlemates); 
             $rencontre->addEquipe($equipesAdversesCOD[$data['adversaire']]);
 
             $manager->persist($rencontre);
+        }
+         $repo = $manager->getRepository(Equipe::class);
+
+        $gentlematesEquipes = $repo->findBy(['isAdversaire' => false]);
+        $adversairesEquipes = $repo->findBy(['isAdversaire' => true]);
+
+        if (empty($gentlematesEquipes) || empty($adversairesEquipes)) {
+            throw new \Exception("Il faut au moins une équipe club et une équipe adversaire en BDD.");
+        }
+
+        $now = new \DateTimeImmutable();
+
+        for ($i = 1; $i <= 5; $i++) {
+            $r = new Rencontre();
+            $r->setDate(\DateTime::createFromImmutable($now->modify("+$i days")));
+            $r->setJeu("VALORANT");
+            $r->setResultat("À venir");
+
+            $gentlemates = $gentlematesEquipes[array_rand($gentlematesEquipes)];
+            $adversaire = $adversairesEquipes[array_rand($adversairesEquipes)];
+
+            $r->addEquipe($gentlemates);
+            $r->addEquipe($adversaire);
+
+            $manager->persist($r);
         }
 
         $manager->flush();

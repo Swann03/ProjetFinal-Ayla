@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% block title %}Classement des votants{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/vote.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="vote-page">
+    <div class="vote-container">
+
+        <h1 class="vote-title">Classement des votants</h1>
+
+        {% if classement is empty %}
+            <p class="vote-empty">Aucun vote enregistré.</p>
+        {% else %}
+
+        <div class="classement-wrapper">
+            <div class="classement-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rang</th>
+                            <th>Utilisateur</th>
+                            <th>Nombre de votes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in classement %}
+                            <tr class="rank-{{ loop.index }}">
+                                <td>#{{ loop.index }}</td>
+                                <td>{{ e.nom }}</td>
+                                <td>{{ e.votes }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {% endif %}
+
+        <a href="{{ path('app_vote') }}" class="back-rank-btn">
+            ← Retour aux votes
+        </a>
+
+    </div>
+</div>
+{% endblock %}
+

@@ -59,7 +59,7 @@ class Rencontre
         return $this->date;
     }
 
-    public function setDate(\DateTime $date): static
+    public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
         return $this;
@@ -161,4 +161,24 @@ class Rencontre
         }
         return $this;
     }
+    public function getEquipeGentlemates(): ?Equipe
+    {
+        foreach ($this->equipes as $equipe) {
+            if ($equipe->getIsAdversaire() === false) {
+                return $equipe;
+            }
+        }
+        return null;
+    }
+
+    public function getEquipeAdversaire(): ?Equipe
+    {
+        foreach ($this->equipes as $equipe) {
+            if ($equipe->getIsAdversaire() === true) {
+                return $equipe;
+            }
+        }
+        return null;
+    }
+
 }

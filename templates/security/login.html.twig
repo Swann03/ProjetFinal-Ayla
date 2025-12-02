@@ -26,40 +26,42 @@
             </div>
         {% endif %}
 
-        <form method="post" class="auth-form">
-            <div class="auth-field">
-                <label for="username">Email</label>
-                <input
-                    type="email"
-                    value="{{ last_username }}"
-                    name="_username"
-                    id="username"
-                    autocomplete="email"
-                    required
-                >
-            </div>
+        <form method="post" action="{{ path('app_login') }}" class="auth-form">
+    <div class="auth-field">
+        <label for="username">Email</label>
+        <input
+            type="email"
+            value="{{ last_username }}"
+            name="_username"
+            id="username"
+            autocomplete="email"
+            required
+        >
+    </div>
 
-            <div class="auth-field">
-                <label for="password">Mot de passe</label>
-                <input
-                    type="password"
-                    name="_password"
-                    id="password"
-                    autocomplete="current-password"
-                    required
-                >
-            </div>
+    <div class="auth-field">
+        <label for="password">Mot de passe</label>
+        <input
+            type="password"
+            name="_password"
+            id="password"
+            autocomplete="current-password"
+            required
+        >
+    </div>
 
-            <input
-                type="hidden"
-                name="_csrf_token"
-                value="{{ csrf_token('authenticate') }}"
-            >
+    {# On enlève le champ CSRF, puisque enable_csrf = false #}
+    {# <input
+        type="hidden"
+        name="_csrf_token"
+        value="{{ csrf_token('authenticate') }}"
+    > #}
 
-            <button class="auth-button" type="submit">
-                Se connecter
-            </button>
-        </form>
+    <button class="auth-button" type="submit">
+        Se connecter
+    </button>
+</form>
+
 
         <p class="auth-footer-text">
             Pas encore de compte ?

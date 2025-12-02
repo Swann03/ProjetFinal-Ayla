@@ -1,0 +1,209 @@
+.vote-page {
+    background: #0a0a0a;
+    min-height: 100vh;
+    padding: 140px 20px 60px; /* pour éviter la navbar */
+}
+
+.vote-container {
+    max-width: 900px;
+    margin: 0 auto;
+    color: white;
+}
+
+/* Titre utilisé seulement pour le classement */
+.vote-title {
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    color: rgba(197, 19, 158, 0.85);
+    letter-spacing: 3px;
+}
+
+.vote-empty {
+    color: #9ca3af;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* TABLE GENERALE */
+
+.vote-table {
+    background: #111;
+    border-radius: 15px;
+    padding: 20px;
+    border: 2px solid rgba(197, 19, 158, 0.35);
+}
+
+.vote-table table {
+    width: 100%;
+    color: #eee;
+    border-collapse: collapse;
+}
+
+.vote-table thead tr {
+    background: rgba(197, 19, 158, 0.18);
+}
+
+.vote-table th {
+    padding: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(197, 19, 158, 0.9);
+    font-size: 0.85rem;
+}
+
+.vote-table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.95rem;
+}
+
+.vote-table tbody tr:nth-child(even) {
+    background: rgba(15, 15, 15, 0.9);
+}
+
+/* Ligne de vote avec noms cliquables */
+
+.vote-match-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.vote-team-name-btn {
+    background: transparent;
+    border: none;
+    color: #e5e7eb;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 999px;
+    transition: 0.2s;
+}
+
+.vote-team-name-btn:hover {
+    background: rgba(197, 19, 158, 0.25);
+    color: #f9fafb;
+}
+
+.vote-vs {
+    font-weight: 700;
+    color: rgba(148, 163, 184, 0.9);
+}
+
+
+.classement-wrapper {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.classement-card {
+    width: 100%;
+    max-width: 700px;
+    background: #111;
+    padding: 25px 30px;
+    border-radius: 18px;
+    border: 2px solid rgba(197, 19, 158, 0.4);
+    box-shadow: 0 0 25px rgba(197, 19, 158, 0.1);
+}
+
+.classement-card table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #f2f2f2;
+}
+
+.classement-card thead tr {
+    background: rgba(197, 19, 158, 0.25);
+}
+
+.classement-card th {
+    text-transform: uppercase;
+    padding: 12px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 1px;
+}
+
+.classement-card tbody tr {
+    transition: 0.25s ease;
+}
+
+.classement-card tbody tr:hover {
+    background: rgba(197, 19, 158, 0.15);
+    transform: scale(1.02);
+}
+
+.classement-card td {
+    padding: 15px 12px;
+    text-align: center;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Styles pour podium */
+
+.rank-1 td {
+    color: gold;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.rank-2 td {
+    color: silver;
+    font-weight: bold;
+    font-size: 1.15rem;
+}
+
+.rank-3 td {
+    color: #cd7f32; /* Bronze */
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Bouton retour */
+
+.back-rank-btn {
+    display: block;
+    margin: 30px auto 0;
+    width: fit-content;
+    padding: 10px 22px;
+    background: rgba(197, 19, 158, 0.2);
+    border: 2px solid rgba(197, 19, 158, 0.5);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.back-rank-btn:hover {
+    background: rgba(197, 19, 158, 0.6);
+    border-color: rgba(197, 19, 158, 1);
+}
+
+
+/* BOUTON LIEN CLASSEMENT / RETOUR */
+
+.vote-link-classement {
+    display: block;
+    width: fit-content;
+    margin: 30px auto 0;
+    font-size: 1rem;
+    padding: 10px 22px;
+    background: rgba(197, 19, 158, 0.18);
+    border: 2px solid rgba(197, 19, 158, 0.5);
+    color: white;
+    text-decoration: none;
+    border-radius: 999px;
+    text-align: center;
+    transition: 0.25s;
+}
+
+.vote-link-classement:hover {
+    background: rgba(197, 19, 158, 0.6);
+    border-color: rgba(197, 19, 158, 1);
+}

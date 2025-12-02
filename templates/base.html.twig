@@ -9,11 +9,13 @@
 
     <!-- Ensuite TON CSS -->
     {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     {% endblock %}
 
     <!-- JS -->
     {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>

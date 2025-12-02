@@ -237,5 +237,27 @@ class Equipe
 
         return $this;
     }
-   
+  public function getNomAffichage(): string
+{
+    // Équipe du club (Gentlemates)
+    if ($this->getIsAdversaire() === false) {
+        return 'Gentlemates';
+    }
+
+    // Équipe adverse
+    return $this->nom ?? 'Adversaire';
+}
+
+public function getLogoAffichage(): ?string
+{
+    // Logo Gentlemates pour les équipes du club
+    if ($this->getIsAdversaire() === false) {
+        return 'gentlemates.png'; // ⚠️ mets ici le VRAI nom de ton fichier logo Gentlemates
+    }
+
+    // Logo normal pour les adversaires
+    return $this->logo ?? 'default_adversaire.png';
+}
+
+
 }
